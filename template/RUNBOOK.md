@@ -59,6 +59,12 @@ It should repeat: plan first, small steps, tests first, protected tests. If it d
 ```
 python scripts/clock.py start --demo 16:30 --every 30
 ```
+Practice runs: `python scripts/clock.py start --budget 120` instead, run the
+build to completion, mark each milestone as you actually reach it
+(`clock.py done plan|tests|slice|green|stop|readme|demo`, where `green` means
+every acceptance test passes), and finish with `clock.py report` for the real
+minutes per phase. That table is how you learn your own pace.
+
 From now on every prompt you send carries one line of time context, and the
 agent tells you when a check-in or milestone is due or overdue.
 `python scripts/clock.py status` shows the whole timeline.

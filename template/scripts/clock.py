@@ -4,7 +4,12 @@
   python scripts/clock.py status                            the timeline, what's done, what's next
   python scripts/clock.py checkin "works X; next Y; deciding Z"   log a check-in (the /checkin command does this)
   python scripts/clock.py done <milestone>                  mark a milestone done (plan, tests, slice, stop, readme)
+  python scripts/clock.py report                            actual minutes per phase vs plan (for estimating)
   python scripts/clock.py hook                              used by the UserPromptSubmit hook
+
+Practice runs to completion: start with --budget 120 instead of --demo, mark
+each milestone with `done` as you actually reach it (plus `done green` when
+every acceptance test passes), and `report` prints a row of real phase times.
 
 The hook runs on every prompt you send. It adds one line of context for the
 agent: time to the demo and what's next, and a loud reminder when a check-in or
@@ -35,6 +40,7 @@ MILESTONES = [
     ("readme", "README and DECISIONS tidy; rehearse the walkthrough", None, 30),
     ("demo", "walkthrough: demo, git log, three decisions, gaps, next", None, 0),
 ]
+EXTRA = {"green": "all acceptance tests passing"}
 
 
 def now() -> datetime:
@@ -88,7 +94,10 @@ def parse_clock(s: str, base: datetime) -> datetime:
 
 def cmd_start(a) -> int:
     t0 = now()
-    demo = parse_clock(a.demo, t0)
+    if not a.demo and not a.budget:
+        print("give --demo HH:MM or --budget MINUTES")
+        return 1
+    demo = parse_clock(a.demo, t0) if a.demo else t0 + timedelta(minutes=a.budget)
     save({"start": t0.strftime(FMT), "demo": demo.strftime(FMT), "every": a.every, "done": {}})
     if not LOG.exists():
         LOG.write_text("# Check-ins\n\n| time | note |\n|---|---|\n", encoding="utf-8")
@@ -134,13 +143,37 @@ def cmd_done(a) -> int:
     if not st:
         print("Clock not started.")
         return 1
-    keys = {m[0] for m in MILESTONES}
+    keys = {m[0] for m in MILESTONES} | set(EXTRA)
     if a.milestone not in keys:
         print(f"Unknown milestone; use one of: {', '.join(sorted(keys))}")
         return 1
     st["done"][a.milestone] = now().strftime(FMT)
     save(st)
     print(f"{a.milestone} marked done.")
+    return 0
+
+
+def cmd_report(_a) -> int:
+    st = load()
+    if not st:
+        print("Clock not started.")
+        return 1
+    start = datetime.strptime(st["start"], FMT)
+    plan = {it["key"]: it["at"] for it in schedule(st)}
+    done = {k: datetime.strptime(v, FMT) for k, v in st.get("done", {}).items()}
+    order = ["plan", "tests", "slice", "green", "stop", "readme", "demo"]
+    print("| milestone | planned (min) | actual (min) | late by |")
+    print("|---|---|---|---|")
+    for k in order:
+        p = int((plan[k] - start).total_seconds() // 60) if k in plan else None
+        a = int((done[k] - start).total_seconds() // 60) if k in done else None
+        late = (a - p) if (a is not None and p is not None) else None
+        print(f"| {k} | {'' if p is None else p} | {'' if a is None else a} | {'' if late is None else late} |")
+    cis = [it for it in schedule(st) if it["kind"] == "checkin" and it["at"] <= now()]
+    on_time = sum(1 for it in cis if it["done"])
+    total = int((max(done.values()) - start).total_seconds() // 60) if done else 0
+    print()
+    print(f"check-ins logged: {on_time}/{len(cis)} due so far; elapsed to last milestone: {total} min")
     return 0
 
 
@@ -173,7 +206,8 @@ def main() -> int:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("start")
-    s.add_argument("--demo", required=True, help="demo time today, HH:MM (24h)")
+    s.add_argument("--demo", help="demo time today, HH:MM (24h)")
+    s.add_argument("--budget", type=int, help="or: minutes from now to the demo (practice runs)")
     s.add_argument("--every", type=int, default=30, help="minutes between check-ins")
     s.set_defaults(fn=cmd_start)
     sub.add_parser("status").set_defaults(fn=cmd_status)
@@ -183,6 +217,7 @@ def main() -> int:
     d = sub.add_parser("done")
     d.add_argument("milestone")
     d.set_defaults(fn=cmd_done)
+    sub.add_parser("report").set_defaults(fn=cmd_report)
     sub.add_parser("hook").set_defaults(fn=cmd_hook)
     a = p.parse_args()
     return a.fn(a)

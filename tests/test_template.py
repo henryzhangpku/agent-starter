@@ -142,3 +142,12 @@ def test_clock_start_status_hook_and_checkin(project):
 def test_settings_wires_clock_hook(project):
     s = json.loads((project / ".claude/settings.json").read_text())
     assert "clock.py hook" in s["hooks"]["UserPromptSubmit"][0]["hooks"][0]["command"]
+
+
+def test_clock_budget_and_report(project):
+    assert clock(project, "start", "--budget", "120").returncode == 0
+    assert clock(project, "done", "plan").returncode == 0
+    assert clock(project, "done", "green").returncode == 0
+    out = clock(project, "report").stdout
+    assert "| plan | 20 | 0 | -20 |" in out
+    assert "| green |" in out and "elapsed to last milestone" in out
