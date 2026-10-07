@@ -53,6 +53,8 @@ Requirements: Python 3 for the hooks (standard library only) and, ideally, pytes
 | `.claude/agents/test-engineer.md` | tests from the spec **without reading the implementation**, run in parallel with the implementer |
 | `.claude/agents/safety-reviewer.md` | failure paths, secrets, money and identity decisions, data handling |
 | `/team-plan`, `/dispatch`, `/integrate` | split; run a wave of subagents in parallel; full test run, ownership check, reviews, one commit per task |
+| `scripts/fanout.py`, `FANOUT_PROMPT.md` | **best-of-N:** one task to several agents (same or different models) in separate worktrees, in parallel; each attempt's tests, diff size and out-of-scope edits ranked in `COMPARE.md`; you read the top diffs and merge one; `--cleanup` removes them |
+| `AGENTS.md`, `scripts/agent_cli.py` | **agent-agnostic:** Codex, Gemini, Cursor and others read AGENTS.md (it points to CLAUDE.md); `loop.py` and `fanout.py` take `--agent claude|codex|gemini` or any CLI you define in `.claude/agent_cli.json`. Hooks only bind Claude Code; for other agents the scripts' test runs and diffs are the check |
 | `scripts/lane.sh`, `lane.ps1` | a separate worktree and branch per task for long tasks, with the guard enforcing the task's paths |
 | `TASKS.md`, `CONTRACTS.md` | the task board; every shared interface, written before parallel work |
 

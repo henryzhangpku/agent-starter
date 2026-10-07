@@ -333,7 +333,16 @@ cd ../lane-T3 && claude                  # paste the printed brief
 git merge --no-ff lane/T3                # from the main checkout, after review
 ```
 
-**T.6 Mix in people.** A teammate can own a task row like any agent: same
+**T.6 Best-of-N for the risky task.** When one task is hard or ambiguous,
+fan it out instead of hoping the first attempt is right:
+```
+python scripts/fanout.py T3 --agents claude,claude,codex --minutes 20
+```
+Each attempt runs in its own worktree; COMPARE.md ranks them by tests, scope
+and diff size. Read the top two diffs, merge one, `--cleanup T3`. Say it out
+loud: "Three independent attempts; the evidence picks, I decide."
+
+**T.7 Mix in people.** A teammate can own a task row like any agent: same
 contract, same done-when tests. Hand them one; it's the best collaboration
 signal of the day. Record it in `TEAM.md`.
 

@@ -325,3 +325,57 @@ def test_settings_wire_the_context_budget(project):
     cmds = [h["command"] for m in s["hooks"]["UserPromptSubmit"] for h in m["hooks"]]
     assert any("context_budget.py" in c for c in cmds)
     assert any("clock.py hook" in c for c in cmds)
+
+
+def test_agent_cli_builtins_and_override(project):
+    sys.path.insert(0, str(project / "scripts"))
+    import importlib
+    ac = importlib.import_module("agent_cli")
+    importlib.reload(ac)
+    c = ac.command("claude", "P", 7, exe="claude")
+    assert c[:3] == ["claude", "-p", "P"] and "--max-turns" in c and "7" in c and "acceptEdits" in c
+    assert "dangerously" not in " ".join(c)
+    assert ac.command("codex", "P", exe="codex") == ["codex", "exec", "--full-auto", "P"]
+    assert ac.command("gemini", "P", exe="gemini") == ["gemini", "-p", "P", "--approval-mode", "auto_edit"]
+    (project / ".claude/agent_cli.json").write_text(json.dumps({"fake": ["python", "-c", "print(1)", "{prompt}"]}))
+    importlib.reload(ac)
+    assert ac.command("fake", "hello") == ["python", "-c", "print(1)", "hello"]
+    with pytest.raises(ValueError):
+        ac.command("nope", "x")
+    sys.path.remove(str(project / "scripts"))
+
+
+@pytest.mark.skipif(shutil.which("git") is None, reason="needs git")
+def test_fanout_ranks_attempts_and_cleans_up(project):
+    def run(*cmd, cwd=project):
+        return subprocess.run(list(cmd), cwd=cwd, capture_output=True, text=True)
+    # a tiny project: one module, one test that needs add() to return a+b
+    (project / "calc.py").write_text("def add(a, b):\n    raise NotImplementedError\n")
+    (project / "tests" / "test_calc.py").write_text("from calc import add\n\ndef test_add():\n    assert add(2, 3) == 5\n")
+    (project / "tests" / "test_acceptance.py").unlink()
+    good = "open('calc.py','w').write('def add(a, b): return a + b')"
+    bad = "open('calc.py','w').write('def add(a, b): return a - b')"
+    (project / ".claude/agent_cli.json").write_text(json.dumps({
+        "good": [sys.executable, "-c", good], "bad": [sys.executable, "-c", bad]}))
+    for c in (["git", "init", "-q", "-b", "main"], ["git", "add", "-A"],
+              ["git", "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "init"]):
+        run(*c)
+    env_cmd = [sys.executable, str(project / "scripts/fanout.py"), "--prompt-file", "PROMPT.md",
+               "--agents", "bad,good", "--minutes", "2"]
+    r = subprocess.run(env_cmd, cwd=project, capture_output=True, text=True,
+                       env={**__import__("os").environ, "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t",
+                            "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"})
+    assert r.returncode == 0, r.stdout + r.stderr
+    cmp = (project / "COMPARE.md").read_text()
+    rows = [l for l in cmp.splitlines() if l.startswith("| 1 ") or l.startswith("| 2 ")]
+    assert "fan/PROMPT/2" in rows[0] and "good" in rows[0] and "1 pass" in rows[0]
+    assert "fan/PROMPT/1" in rows[1] and "fail" in rows[1]
+    assert (project.parent / "fan-PROMPT-2").exists()
+    run(sys.executable, str(project / "scripts/fanout.py"), "--cleanup", "PROMPT")
+    assert not (project.parent / "fan-PROMPT-1").exists()
+    assert "fan/PROMPT" not in run("git", "branch").stdout
+
+
+def test_agents_md_points_to_claude_md(project):
+    txt = (project / "AGENTS.md").read_text(encoding="utf-8")
+    assert "CLAUDE.md" in txt and "acceptance tests" in txt

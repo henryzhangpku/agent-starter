@@ -4,3 +4,4 @@ __pycache__/
 .claude/clock.json
 .claude/lane.json
 .claude/test_timing.json
+.fanout/
