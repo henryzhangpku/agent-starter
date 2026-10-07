@@ -4,6 +4,29 @@ Every step has a time box, what you do, what you say or paste, what it produces,
 and the commit that closes it. Times assume a 9:30 start and a 4:30 demo; shift
 them to your day. Copy-paste prompts are in `> quotes`.
 
+## Principles (re-read before every run)
+
+**Specify before you generate. Verify independently. Present only what is proven.**
+
+- **Productivity:** front-load the spec (PROMPT.md, contracts, failing tests);
+  thinnest end-to-end slice first, runnable at every commit; one small,
+  checkable task per prompt; decide the cut list by minute 20; the agent writes
+  plumbing, tests-from-spec and docs, you make decisions and find edge cases.
+- **Quality through separated roles:** the agent that writes code never grades
+  it. Architect sets contracts; implementer builds one task; test-engineer
+  writes tests from the spec without reading the code; reviewer and
+  safety-reviewer judge with fresh context; you run the tests yourself and
+  decide. Separation is the point, not the number of agents: two or three
+  roles that check each other beat five that agree with each other.
+- **Correctness:** tests are the spec and are protected; test invariants, not
+  just examples; measure against a baseline and, where possible, a human
+  ceiling; read every diff, reject clever code; fail closed.
+- **Presentable:** one command demos it; README leads with the number and
+  what it's compared against; git log tells the story; visuals last; name
+  the gaps first.
+- **Time split for a three-hour build:** ~15% framing, 50% building, 20%
+  verifying, 15% presenting. `clock.py report` shows where yours drifts.
+
 ## Pick the mode in the first five minutes
 
 | situation | path through this runbook |
