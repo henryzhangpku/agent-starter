@@ -11,8 +11,8 @@ worktree), edits are also limited to the lane's "owns" paths plus
 tests/<task>/, so parallel agents cannot step on each other's files.
 
 Exit codes follow the hook contract: 0 allows; 2 blocks and stderr is shown to
-the agent. Missing or unreadable config fails closed on the acceptance tests
-default. Standard library only, so it runs on any fresh machine.
+the agent. Acceptance tests start unlocked so the agent can write them in
+Phase 4; `python scripts/lock_tests.py <path>` locks them once committed. Standard library only, so it runs on any fresh machine.
 """
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parents[2]
 DEFAULTS = {
     "protected_prefixes": ["data/"],
     "protected_files": [],
-    "acceptance_tests": ["tests/test_acceptance.py"],
+    "acceptance_tests": [],
     "allowed_files": [],
 }
 

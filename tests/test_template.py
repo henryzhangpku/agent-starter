@@ -23,7 +23,17 @@ def guard(project, file_path):
                           input=payload, capture_output=True, text=True)
 
 
+def test_acceptance_tests_writable_until_locked(project):
+    assert guard(project, project / "tests/test_acceptance.py").returncode == 0      # Phase 4: agent writes them
+    r = subprocess.run([sys.executable, str(project / "scripts/lock_tests.py"), "tests/test_acceptance.py"],
+                       capture_output=True, text=True, cwd=project)
+    assert r.returncode == 0 and "tests/test_acceptance.py" in r.stdout
+    assert guard(project, project / "tests/test_acceptance.py").returncode == 2      # locked afterwards
+
+
 def test_guard_blocks_protected_and_acceptance(project):
+    subprocess.run([sys.executable, str(project / "scripts/lock_tests.py"), "tests/test_acceptance.py"],
+                   capture_output=True, text=True, cwd=project)
     for target in ("data/calls.jsonl", "tests/test_acceptance.py", project / "data" / "x.csv"):
         r = guard(project, target if isinstance(target, Path) else project / target)
         assert r.returncode == 2, target

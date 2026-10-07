@@ -173,7 +173,9 @@ or tests an implementation detail.
 **4.5 Say the minute-30 line:** "Here's the plan and the N tests that define
 done. Thinnest slice first; I'll check in at <time>."
 
-From now on the guard refuses any edit to `tests/test_acceptance.py`.
+**4.6 Lock them:** `python scripts/lock_tests.py tests/test_acceptance.py`
+(add any other acceptance test files). From now on the guard refuses any agent
+edit to them; you can still change them yourself if the team changes the spec.
 
 ---
 

@@ -1,6 +1,8 @@
 {
-  "protected_prefixes": ["data/"],
+  "protected_prefixes": [
+    "data/"
+  ],
   "protected_files": [],
-  "acceptance_tests": ["tests/test_acceptance.py"],
+  "acceptance_tests": [],
   "allowed_files": []
 }

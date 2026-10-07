@@ -9,7 +9,7 @@
 | minute 5 | project facts in CLAUDE.md; paths in `.claude/guard.json` | "Telling the agent the rules before it writes anything." |
 | minute 10 | plan mode (`Shift+Tab`), then edit the plan out loud; save PLAN.md | "Cutting X, doing Y first, adding Z. Does that match your priority?" |
 | minute 20 | `/team-plan` only if the work splits; contracts first | "Contracts first, then three tasks in parallel. Want to take one?" |
-| minute 25 | dictate 5-10 acceptance tests; show they fail; commit | "Here are the N tests that define done." |
+| minute 25 | dictate 5-10 acceptance tests; show they fail; commit; `python scripts/lock_tests.py tests/test_acceptance.py` | "Here are the N tests that define done." |
 | every step | `/next` -> read plan -> go -> read diff -> commit | the prompt before you type it; why you reject a diff |
 | every 30 min | `/checkin` (clock reminds you) | works / next / deciding / risk, to the person who set the prompt |
 | ~2h in | thin slice runs end to end | "First version runs end to end. Two minutes to see it?" |
