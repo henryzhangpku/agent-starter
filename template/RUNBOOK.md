@@ -6,7 +6,9 @@ them to your day. Copy-paste prompts are in `> quotes`.
 
 ## Principles (re-read before every run)
 
-**Specify before you generate. Verify independently. Present only what is proven.**
+**Specify before you generate. Verify independently. Present only what is proven. Talk the whole time.**
+
+Print or keep open `CARD.md`: the whole day on one page.
 
 - **Productivity:** front-load the spec (PROMPT.md, contracts, failing tests);
   thinnest end-to-end slice first, runnable at every commit; one small,
@@ -95,11 +97,16 @@ agent tells you when a check-in or milestone is due or overdue.
 **1.1 Write the prompt word for word** into `PROMPT.md` under *Word for word*,
 while it is being explained. Say: "Let me write that down exactly."
 
-**1.2 Ask the five questions out loud** (they are in `PROMPT.md`) and type the
+**1.2 Find out who to talk to.** `/questions` reads the prompt and writes into
+`TEAM.md` the roles this build depends on, up to three prompt-specific
+questions for each, when to ask them, and what you can offer each person.
+It ends with the three questions to ask in the first five minutes.
+
+**1.3 Ask them out loud** (the generic five are also in `PROMPT.md`) and type the
 answers: who uses the output, what data, what done looks like, what is off
 limits, which mistake costs more.
 
-**1.3 Write your assumptions** at the bottom, and read them back: "I'm assuming
+**1.4 Write your assumptions** at the bottom, and read them back: "I'm assuming
 X and Y; correct me."
 
 **Output:** `PROMPT.md` filled. Nothing else yet.
@@ -223,6 +230,16 @@ You merge it; read its diff aloud first. Better still: give that lane to a perso
 held-out set once, at the end, and say so.
 
 ---
+
+## Phase 7b. A bounded loop for a well-specified backlog (optional)
+
+When the remaining plan items are small, specified and covered by tests:
+```
+python scripts/loop.py --iterations 4 --minutes 15      # --dry-run first to see the command
+```
+Fresh headless sessions take one item per pass, keep the tests green, commit,
+and log to LOOP.md; it stops when done, stalled twice, or at the limit.
+Say it out loud, keep it short and visible, and review every commit after.
 
 ## Phase 8. Stop building (about 3:30 to 4:00)
 

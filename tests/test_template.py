@@ -151,3 +151,34 @@ def test_clock_budget_and_report(project):
     out = clock(project, "report").stdout
     assert "| plan | 20 | 0 | -20 |" in out
     assert "| green |" in out and "elapsed to last milestone" in out
+
+
+def test_loop_decide_stop_rules(project):
+    sys.path.insert(0, str(project / "scripts"))
+    import importlib
+    loop = importlib.import_module("loop")
+    importlib.reload(loop)
+    assert loop.decide(0, True, True, 0, 1, 6, 1, 30).startswith("done")
+    assert loop.decide(0, False, True, 0, 1, 6, 1, 30) is None          # items done but tests red: keep going
+    assert loop.decide(3, True, False, 2, 2, 6, 1, 30).startswith("stalled")
+    assert loop.decide(3, True, True, 0, 6, 6, 1, 30).startswith("limit")
+    assert loop.decide(3, True, True, 0, 1, 6, 31, 30).startswith("limit")
+    assert loop.decide(3, True, True, 1, 1, 6, 1, 30) is None
+    sys.path.remove(str(project / "scripts"))
+
+
+def test_loop_counts_open_items_and_dry_run(project):
+    (project / "PLAN.md").write_text("- [x] one\n- [ ] two\n  - [ ] three\n")
+    (project / "TASKS.md").write_text("| id | wave | role | goal | owns | depends | done when | status |\n|---|---|---|---|---|---|---|---|\n"
+                                       "| T1 | 1 | implementer | a | a/ | - | t | done |\n| T2 | 1 | implementer | b | b/ | - | t | todo |\n")
+    r = subprocess.run([sys.executable, str(project / "scripts/loop.py"), "--dry-run", "--claude", "claude"],
+                       capture_output=True, text=True, cwd=project)
+    assert r.returncode == 0
+    assert "--permission-mode acceptEdits" in r.stdout and "--max-turns" in r.stdout
+    assert "dangerously" not in r.stdout and "bypassPermissions" not in r.stdout
+    sys.path.insert(0, str(project / "scripts"))
+    import importlib
+    loop = importlib.import_module("loop")
+    importlib.reload(loop)
+    assert loop.open_items() == 3
+    sys.path.remove(str(project / "scripts"))

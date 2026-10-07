@@ -26,6 +26,7 @@ Requirements: Python 3 for the hooks (standard library only) and, ideally, pytes
 
 | file | job |
 |---|---|
+| `CARD.md` | the whole day on one page: what to do and what to say at each moment; keep it open |
 | `RUNBOOK.md` | **start here:** the build day step by step, with modes for a new problem, an existing codebase, team mode and shipping; time boxes, copy-paste prompts, the commit that closes each phase |
 | `CLAUDE.md` | the working agreement: plan first, small steps, tests before code, never weaken a test, the model proposes and code decides, one module calls a model. Plus project facts you fill in |
 | `.claude/settings.json` | wires two hooks into every edit |
@@ -55,6 +56,8 @@ Requirements: Python 3 for the hooks (standard library only) and, ideally, pytes
 | `.claude/agents/explorer.md`, `/onboard` | read-only map: run, test, ship, conventions, where the change goes, owners, questions to ask |
 | `/publish` | open-source a finished build: secret and name checks, README with measured results, licence, optional demo page with link preview, a post draft; never pushes or posts |
 | `/ship` | the team's own checks, rollout behind a flag, rollback, observability, a PR description; never merges or deploys itself |
+| `/questions` | from the prompt: who to reach out to, up to three specific questions each, when to ask, what to offer back; the first three questions to say out loud |
+| `scripts/loop.py`, `LOOP_PROMPT.md` | a bounded Ralph loop: fresh headless sessions take one plan item per pass, keep tests green, commit, log to LOOP.md; stops when done, stalled twice, or at the time/pass limit; edits auto-accepted, shell limited, permissions never skipped |
 | `TEAM.md` | who owns what, questions asked and answers, handoffs to people, credit |
 | `LANE.md` | a brief for a second agent or a person owning a slice |
 
