@@ -53,6 +53,7 @@ Requirements: Python 3 for the hooks (standard library only) and, ideally, pytes
 | file | job |
 |---|---|
 | `.claude/agents/explorer.md`, `/onboard` | read-only map: run, test, ship, conventions, where the change goes, owners, questions to ask |
+| `/publish` | open-source a finished build: secret and name checks, README with measured results, licence, optional demo page with link preview, a post draft; never pushes or posts |
 | `/ship` | the team's own checks, rollout behind a flag, rollback, observability, a PR description; never merges or deploys itself |
 | `TEAM.md` | who owns what, questions asked and answers, handoffs to people, credit |
 | `LANE.md` | a brief for a second agent or a person owning a slice |

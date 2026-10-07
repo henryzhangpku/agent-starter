@@ -225,6 +225,12 @@ held-out set once, at the end, and say so.
 
 ---
 
+## Phase 11 (practice builds). Open-source it
+
+`/publish` prepares README, licence, demo page and a post draft after the
+checks (secrets, names, data provenance). You create the repo and push;
+share one build at a time.
+
 ## Phase 10. Leave clean
 
 `/logout` in Claude Code; sign out of browser sessions; close private
