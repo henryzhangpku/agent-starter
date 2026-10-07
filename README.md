@@ -32,7 +32,8 @@ Requirements: Python 3 for the hooks (standard library only) and, ideally, pytes
 | `.claude/hooks/guard.py` | **PreToolUse:** refuses edits to protected inputs and acceptance tests, and in a lane, anything outside the lane's paths (exit 2, reason shown to the agent). Paths in `.claude/guard.json` |
 | `.claude/hooks/run_tests.py` | **PostToolUse:** runs the tests after every edit; failures go straight back to the agent |
 | `.claude/agents/reviewer.md` | read-only reviewer with a fresh context: an agent grading its own work passes itself |
-| `/checkin`, `/next` | status in four lines; take the next plan step, plan first |
+| `scripts/clock.py` + a UserPromptSubmit hook | **the build-day clock:** `clock.py start --demo 16:30` once; every prompt then carries time-to-demo, and the agent warns you when a check-in or milestone (plan, tests, slice, stop, README, demo) is due or overdue. Check-ins are logged to `CHECKINS.md` |
+| `/checkin`, `/next` | status in four lines, logged with the clock; take the next plan step, plan first |
 | `PROMPT.md`, `PLAN.md`, `NOTES.md`, `DECISIONS.md` | the request and answers; the plan with a test per step; state across `/clear`; what was proposed, chosen, and why |
 
 **Team mode: agents as an engineering team**

@@ -55,6 +55,14 @@ It should repeat: plan first, small steps, tests first, protected tests. If it d
 
 ## Phase 1. Capture the problem (minutes 0-5)
 
+**1.0 Start the clock** the moment the prompt is given, with the demo time you agree:
+```
+python scripts/clock.py start --demo 16:30 --every 30
+```
+From now on every prompt you send carries one line of time context, and the
+agent tells you when a check-in or milestone is due or overdue.
+`python scripts/clock.py status` shows the whole timeline.
+
 **1.1 Write the prompt word for word** into `PROMPT.md` under *Word for word*,
 while it is being explained. Say: "Let me write that down exactly."
 
@@ -156,7 +164,9 @@ format. **Demo it to the room**, even if it's ugly.
 > /checkin
 
 Say the four lines out loud: works, next, deciding, risk. It fills the row in
-`PLAN.md`. Before lunch and before any `/clear`, also:
+`PLAN.md` and logs the time to `CHECKINS.md`, so the clock stops nagging. Mark
+milestones as you hit them: `python scripts/clock.py done slice` (plan, tests,
+slice, stop, readme). Before lunch and before any `/clear`, also:
 > Update NOTES.md: what is done, what is in progress, open questions, gotchas.
 
 Then `/clear` is free: the next session reads `PROMPT.md`, `PLAN.md` and `NOTES.md`.

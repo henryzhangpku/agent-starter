@@ -4,7 +4,10 @@
       {
         "matcher": "Edit|Write|MultiEdit|NotebookEdit",
         "hooks": [
-          { "type": "command", "command": "python3 .claude/hooks/guard.py || python .claude/hooks/guard.py" }
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/guard.py || python .claude/hooks/guard.py"
+          }
         ]
       }
     ],
@@ -12,7 +15,21 @@
       {
         "matcher": "Edit|Write|MultiEdit|NotebookEdit",
         "hooks": [
-          { "type": "command", "command": "python3 .claude/hooks/run_tests.py || python .claude/hooks/run_tests.py", "timeout": 300 }
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/run_tests.py || python .claude/hooks/run_tests.py",
+            "timeout": 300
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 scripts/clock.py hook || python scripts/clock.py hook"
+          }
         ]
       }
     ]

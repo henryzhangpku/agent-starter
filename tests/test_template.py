@@ -105,3 +105,40 @@ def test_lane_script_creates_worktree_with_ownership(project):
     r = subprocess.run([sys.executable, str(lane / ".claude/hooks/guard.py")], input=payload,
                        capture_output=True, text=True)
     assert r.returncode == 2
+
+
+def clock(project, *args, stdin=""):
+    return subprocess.run([sys.executable, str(project / "scripts/clock.py"), *args], input=stdin,
+                          capture_output=True, text=True, cwd=project)
+
+
+def test_clock_silent_until_started(project):
+    r = clock(project, "hook", stdin="{}")
+    assert r.returncode == 0 and r.stdout == ""
+
+
+def test_clock_start_status_hook_and_checkin(project):
+    from datetime import datetime, timedelta
+    demo = (datetime.now() + timedelta(hours=6)).strftime("%H:%M")
+    assert clock(project, "start", "--demo", demo).returncode == 0
+    st_path = project / ".claude/clock.json"
+    st = json.loads(st_path.read_text())
+    # pretend we started 95 minutes ago: plan, tests and three check-ins are overdue
+    st["start"] = (datetime.now() - timedelta(minutes=95)).strftime("%Y-%m-%dT%H:%M")
+    st_path.write_text(json.dumps(st))
+    out = clock(project, "hook", stdin="{}").stdout
+    assert "to the demo" in out
+    assert out.count("OVERDUE") >= 4
+    assert "/checkin" in out
+    assert clock(project, "checkin", "works", "slice;", "next", "scoring").returncode == 0
+    assert clock(project, "done", "plan").returncode == 0
+    assert clock(project, "done", "tests").returncode == 0
+    out2 = clock(project, "hook", stdin="{}").stdout
+    assert out2.count("OVERDUE") == out.count("OVERDUE") - 3
+    assert "works slice" in (project / "CHECKINS.md").read_text()
+    assert "[x]" in clock(project, "status").stdout
+
+
+def test_settings_wires_clock_hook(project):
+    s = json.loads((project / ".claude/settings.json").read_text())
+    assert "clock.py hook" in s["hooks"]["UserPromptSubmit"][0]["hooks"][0]["command"]
