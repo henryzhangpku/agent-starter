@@ -59,3 +59,49 @@ def test_settings_is_valid_json_and_wires_both_hooks(project):
 def test_agent_and_commands_have_frontmatter(project):
     for f in [project / ".claude/agents/reviewer.md", *sorted((project / ".claude/commands").glob("*.md"))]:
         assert f.read_text(encoding="utf-8").startswith("---\n"), f
+
+
+def test_guard_lane_ownership(project):
+    (project / ".claude/lane.json").write_text(json.dumps({"task": "T3", "owns": ["src/report/", "src/cli.py"]}))
+    assert guard(project, project / "src/report/html.py").returncode == 0
+    assert guard(project, project / "src/cli.py").returncode == 0
+    assert guard(project, project / "tests/T3/test_html.py").returncode == 0
+    assert guard(project, project / "NOTES.md").returncode == 0
+    r = guard(project, project / "src/scoring.py")
+    assert r.returncode == 2 and "outside lane T3" in r.stderr
+    assert guard(project, project / "src/reporting.py").returncode == 2   # prefix must be a directory boundary
+
+
+def test_guard_unreadable_lane_fails_closed(project):
+    (project / ".claude/lane.json").write_text("{not json")
+    assert guard(project, project / "src/anything.py").returncode == 2
+
+
+def _bash():
+    """Git Bash on Windows (WSL's bash would create WSL paths the Windows git can't read)."""
+    if sys.platform == "win32":
+        for c in ("C:/Program Files/Git/bin/bash.exe", "C:/Program Files (x86)/Git/bin/bash.exe"):
+            if Path(c).exists():
+                return c
+        return None
+    return shutil.which("bash")
+
+
+@pytest.mark.skipif(_bash() is None or shutil.which("git") is None, reason="needs bash and git")
+def test_lane_script_creates_worktree_with_ownership(project):
+    def run(*cmd, cwd=project):
+        return subprocess.run(list(cmd), cwd=cwd, capture_output=True, text=True, check=True)
+    run("git", "init", "-q", "-b", "main")
+    run("git", "-c", "user.email=t@t", "-c", "user.name=t", "add", "-A")
+    run("git", "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "init")
+    out = run(_bash(), "scripts/lane.sh", "T9", "src/report/").stdout
+    lane = project.parent / "lane-T9"
+    assert "Lane T9 ready" in out
+    cfg = json.loads((lane / ".claude/lane.json").read_text())
+    assert cfg == {"task": "T9", "owns": ["src/report/"]}
+    status = run("git", "status", "--porcelain", cwd=lane).stdout
+    assert "lane.json" not in status                                      # excluded, never committed
+    payload = json.dumps({"tool_input": {"file_path": str(lane / "src/other.py")}})
+    r = subprocess.run([sys.executable, str(lane / ".claude/hooks/guard.py")], input=payload,
+                       capture_output=True, text=True)
+    assert r.returncode == 2

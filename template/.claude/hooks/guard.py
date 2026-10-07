@@ -6,6 +6,10 @@ Reads the hook payload (JSON) from stdin. Paths come from .claude/guard.json:
   acceptance_tests    tests the agent is judged by and must not weaken
   allowed_files       exceptions inside the protected sets
 
+Team mode: if .claude/lane.json exists (written by scripts/lane.sh in a lane
+worktree), edits are also limited to the lane's "owns" paths plus
+tests/<task>/, so parallel agents cannot step on each other's files.
+
 Exit codes follow the hook contract: 0 allows; 2 blocks and stderr is shown to
 the agent. Missing or unreadable config fails closed on the acceptance tests
 default. Standard library only, so it runs on any fresh machine.
@@ -46,7 +50,26 @@ def relative(path_str: str) -> str | None:
     return PurePosixPath(rel.as_posix()).as_posix()
 
 
-def verdict(path_str: str, cfg: dict) -> str | None:
+def load_lane() -> dict | None:
+    path = ROOT / ".claude" / "lane.json"
+    if not path.exists():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {"task": "?", "owns": []}  # unreadable lane file: fail closed
+
+
+def lane_verdict(rel: str, lane: dict) -> str | None:
+    owns = list(lane.get("owns", [])) + [f"tests/{lane.get('task', '?')}/", "NOTES.md"]
+    for p in owns:
+        if rel == p.rstrip("/") or rel.startswith(p if p.endswith("/") else p + "/") or rel == p:
+            return None
+    return (f"{rel} is outside lane {lane.get('task', '?')}'s ownership ({', '.join(lane.get('owns', []))}). "
+            "Stop and ask the orchestrator to change the contract or reassign the path.")
+
+
+def verdict(path_str: str, cfg: dict, lane: dict | None = None) -> str | None:
     rel = relative(path_str)
     if rel is None or rel in cfg["allowed_files"]:
         return None
@@ -56,6 +79,8 @@ def verdict(path_str: str, cfg: dict) -> str | None:
     if rel in cfg["protected_files"] or any(rel.startswith(p) for p in cfg["protected_prefixes"]):
         return (f"{rel} is protected input or an audit record. Fix the code, not the inputs. "
                 "Ask the human if it really needs to change.")
+    if lane is not None:
+        return lane_verdict(rel, lane)
     return None
 
 
@@ -70,7 +95,7 @@ def main() -> int:
     path = tool_input.get("file_path") or tool_input.get("notebook_path")
     if not path:
         return 0
-    reason = verdict(path, load_config())
+    reason = verdict(path, load_config(), load_lane())
     if reason:
         print(f"BLOCKED by .claude/hooks/guard.py: {reason}", file=sys.stderr)
         return 2

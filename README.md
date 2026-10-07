@@ -22,22 +22,39 @@ Requirements: Python 3 for the hooks (standard library only) and, ideally, pytes
 
 ## What you get
 
+**Solo loop**
+
 | file | job |
 |---|---|
-| `RUNBOOK.md` | **start here:** the whole build day, step by step, with time boxes, copy-paste prompts and the commit that closes each phase |
-| `CLAUDE.md` | the working agreement: plan first, small steps, tests before code, never weaken a test, the model proposes and code decides, one module calls a model. Plus five project facts you fill in |
+| `RUNBOOK.md` | **start here:** the build day step by step, with modes for a new problem, an existing codebase, team mode and shipping; time boxes, copy-paste prompts, the commit that closes each phase |
+| `CLAUDE.md` | the working agreement: plan first, small steps, tests before code, never weaken a test, the model proposes and code decides, one module calls a model. Plus project facts you fill in |
 | `.claude/settings.json` | wires two hooks into every edit |
-| `.claude/hooks/guard.py` | **PreToolUse:** refuses edits to protected inputs and to the acceptance tests (exit 2, with the reason shown to the agent). Paths live in `.claude/guard.json` |
-| `.claude/hooks/run_tests.py` | **PostToolUse:** runs the test suite after every edit and puts failures in front of the agent at once |
-| `.claude/agents/reviewer.md` | a read-only reviewer subagent with a fresh context: an agent grading its own work passes itself |
-| `.claude/commands/checkin.md` | `/checkin`: status in four lines from the plan and a test run |
-| `.claude/commands/next.md` | `/next`: take the next unticked plan step, plan first, wait for a go |
-| `PROMPT.md` | the request word for word, the answers to your clarifying questions, your assumptions |
-| `PLAN.md` | the plan as checkboxes, each step with the test that proves it; cuts, risks, check-ins |
-| `NOTES.md` | state for the next context, written before every `/clear` |
-| `DECISIONS.md` | what was proposed, what was chosen, why |
-| `LANE.md` | the brief for a second agent in its own git worktree |
-| `tests/test_acceptance.py` | the placeholder for the tests that define done (protected by the guard) |
+| `.claude/hooks/guard.py` | **PreToolUse:** refuses edits to protected inputs and acceptance tests, and in a lane, anything outside the lane's paths (exit 2, reason shown to the agent). Paths in `.claude/guard.json` |
+| `.claude/hooks/run_tests.py` | **PostToolUse:** runs the tests after every edit; failures go straight back to the agent |
+| `.claude/agents/reviewer.md` | read-only reviewer with a fresh context: an agent grading its own work passes itself |
+| `/checkin`, `/next` | status in four lines; take the next plan step, plan first |
+| `PROMPT.md`, `PLAN.md`, `NOTES.md`, `DECISIONS.md` | the request and answers; the plan with a test per step; state across `/clear`; what was proposed, chosen, and why |
+
+**Team mode: agents as an engineering team**
+
+| file | job |
+|---|---|
+| `.claude/agents/architect.md` | splits the plan into tasks with **disjoint file ownership**, fixes shared contracts first, groups tasks into waves |
+| `.claude/agents/implementer.md` | one task, only its paths, against the contracts, until its tests pass |
+| `.claude/agents/test-engineer.md` | tests from the spec **without reading the implementation**, run in parallel with the implementer |
+| `.claude/agents/safety-reviewer.md` | failure paths, secrets, money and identity decisions, data handling |
+| `/team-plan`, `/dispatch`, `/integrate` | split; run a wave of subagents in parallel; full test run, ownership check, reviews, one commit per task |
+| `scripts/lane.sh`, `lane.ps1` | a separate worktree and branch per task for long tasks, with the guard enforcing the task's paths |
+| `TASKS.md`, `CONTRACTS.md` | the task board; every shared interface, written before parallel work |
+
+**Existing codebases and shipping with a team**
+
+| file | job |
+|---|---|
+| `.claude/agents/explorer.md`, `/onboard` | read-only map: run, test, ship, conventions, where the change goes, owners, questions to ask |
+| `/ship` | the team's own checks, rollout behind a flag, rollback, observability, a PR description; never merges or deploys itself |
+| `TEAM.md` | who owns what, questions asked and answers, handoffs to people, credit |
+| `LANE.md` | a brief for a second agent or a person owning a slice |
 
 ## The first thirty minutes with it (the full day is in RUNBOOK.md)
 
@@ -57,7 +74,10 @@ An instruction in a prompt is a request. A hook is a rule. "Never edit the
 tests to make them pass" works far better when the edit is physically refused
 and the agent is told why. The same goes for input data and audit records.
 
-Worked example: this kit was extracted from [call-eval](https://github.com/henryzhangpku/call-eval);
-its `CLAUDE.md`, hooks, reviewer, `PLAN.md` and `DECISIONS.md` are a filled-in version.
+## Examples
+
+Builds that use the kit, filled in. See [`examples/`](examples/README.md).
+
+1. [call-eval](https://github.com/henryzhangpku/call-eval): post-call evaluation for voice agents. The kit was extracted from it; its `CLAUDE.md`, hooks, reviewer, `PLAN.md` and `DECISIONS.md` are the filled-in solo loop.
 
 MIT licence.

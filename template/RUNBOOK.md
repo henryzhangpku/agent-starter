@@ -4,6 +4,17 @@ Every step has a time box, what you do, what you say or paste, what it produces,
 and the commit that closes it. Times assume a 9:30 start and a 4:30 demo; shift
 them to your day. Copy-paste prompts are in `> quotes`.
 
+## Pick the mode in the first five minutes
+
+| situation | path through this runbook |
+|---|---|
+| **New, standalone problem** | Phases 0 to 10 in order |
+| **Their existing codebase** | Phase 0 (skip `git init`; branch instead), **Phase A**, then 1 to 10; ship with **Phase S** |
+| **A feature or subsystem with the team, deployed** | Phase A, 1 to 4, then **Phase T** for parallel work, **Phase S** to ship |
+| **Short on time** | 0, 1, 3, 4, 5, 9: plan, failing tests, thinnest slice, walkthrough |
+
+Keep `TEAM.md` open all day in every mode: who owns what, what you asked, what they said.
+
 ---
 
 ## Phase 0. Set up (10 minutes, before the prompt)
@@ -203,6 +214,84 @@ held-out set once, at the end, and say so.
 `/logout` in Claude Code; sign out of browser sessions; close private
 windows. Push nothing to your own accounts from someone else's machine unless
 they asked. Leave the repo and branch where they can see it.
+
+---
+
+## Phase A. Existing codebase: learn before you touch (15-20 minutes)
+
+**A.1** Branch: `git checkout -b <you>/<feature>`. Their `CLAUDE.md`, linters
+and conventions win; the installer never overwrites their files. Ask before
+adding the kit's files; if they'd rather not, keep them in a sibling folder.
+
+**A.2** `/onboard` (explorer subagent, read-only). You get: how to run, test
+and ship; the main flow; conventions with example files; files the change
+will touch; owners from git history; questions for the team.
+
+**A.3 Talk to people, with the questions it produced.** One question per
+owner, short: "I'm adding X near your Y; is Z the right seam, or is there a
+pattern you'd rather I follow?" Write answers in `TEAM.md`. This is the
+collaboration they are watching.
+
+**A.4** Run their tests once before changing anything, so you know the baseline.
+
+**A.5** Copy the conventions you found into the project facts in `CLAUDE.md`
+(or a local note) so every agent session follows them.
+
+---
+
+## Phase T. Team mode: parallel agents like an engineering team (after Phase 4)
+
+Use once the plan and acceptance tests exist and the work splits cleanly.
+Three to five parallel tasks is the sweet spot; more costs more to integrate
+than it saves.
+
+**T.1 Split.** `/team-plan`: the architect subagent writes `CONTRACTS.md`
+(every shared interface, fixed first) and `TASKS.md` (tasks with disjoint
+file ownership, dependencies, done-when tests, waves). **You** approve the
+split out loud: "contracts first, then three tasks in parallel."
+
+**T.2 Land the contracts.** The task that owns shared code (usually T1) goes
+first, alone. Commit.
+
+**T.3 Run a wave.** `/dispatch 1`. Implementer and test-engineer subagents
+run in parallel, each limited to its task's paths. Test-engineers write tests
+from the spec without reading the code, so the tests are independent.
+
+**T.4 Integrate.** `/integrate`: full test run, a path-ownership check, the
+reviewer and (for risky changes) the safety-reviewer in parallel, then one
+commit per task after your approval.
+
+**T.5 Heavier isolation, when tasks run long:** a separate session per task
+in its own worktree, with the guard enforcing ownership:
+```
+scripts/lane.sh T3 src/report/          # Windows: scripts\lane.ps1 T3 src/report/
+cd ../lane-T3 && claude                  # paste the printed brief
+git merge --no-ff lane/T3                # from the main checkout, after review
+```
+
+**T.6 Mix in people.** A teammate can own a task row like any agent: same
+contract, same done-when tests. Hand them one; it's the best collaboration
+signal of the day. Record it in `TEAM.md`.
+
+**Roles available:** architect (opus, plans and contracts), implementer
+(sonnet, one task), test-engineer (sonnet, independent tests), reviewer
+(fresh context), safety-reviewer (opus, failure paths and data), explorer
+(read-only mapping).
+
+---
+
+## Phase S. Ship it through their process
+
+**S.1** `/ship`: the team's own test, lint and type commands; scope check;
+migrations; rollout behind a flag or safe default; rollback steps;
+observability; a PR description with reviewers from CODEOWNERS.
+
+**S.2** Open the PR the way they do. Ask the owner from `TEAM.md` to review.
+Never merge or deploy on your own on someone else's system; walk through the
+rollout and rollback with whoever owns deploys, then let their pipeline do it.
+
+**S.3** After deploy: check the signal you named in S.1 (a log line, a metric,
+a dashboard) and say what you saw.
 
 ---
 
