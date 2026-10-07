@@ -24,6 +24,7 @@ Requirements: Python 3 for the hooks (standard library only) and, ideally, pytes
 
 | file | job |
 |---|---|
+| `RUNBOOK.md` | **start here:** the whole build day, step by step, with time boxes, copy-paste prompts and the commit that closes each phase |
 | `CLAUDE.md` | the working agreement: plan first, small steps, tests before code, never weaken a test, the model proposes and code decides, one module calls a model. Plus five project facts you fill in |
 | `.claude/settings.json` | wires two hooks into every edit |
 | `.claude/hooks/guard.py` | **PreToolUse:** refuses edits to protected inputs and to the acceptance tests (exit 2, with the reason shown to the agent). Paths live in `.claude/guard.json` |
@@ -38,7 +39,7 @@ Requirements: Python 3 for the hooks (standard library only) and, ideally, pytes
 | `LANE.md` | the brief for a second agent in its own git worktree |
 | `tests/test_acceptance.py` | the placeholder for the tests that define done (protected by the guard) |
 
-## The first thirty minutes with it
+## The first thirty minutes with it (the full day is in RUNBOOK.md)
 
 1. **0-5:** write the request into `PROMPT.md`; ask the people, not the tool,
    who uses the output, what data exists, what done means, what costs most.
