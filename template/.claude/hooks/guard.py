@@ -1,4 +1,4 @@
-"""PreToolUse guard: refuse agent edits to protected paths.
+"""PreToolUse guard: refuse agent edits to protected paths, by edit tool or by shell.
 
 Reads the hook payload (JSON) from stdin. Paths come from .claude/guard.json:
   protected_prefixes  directories the agent must never edit (input data, audit logs)
@@ -17,6 +17,8 @@ Phase 4; `python scripts/lock_tests.py <path>` locks them once committed. Standa
 from __future__ import annotations
 
 import json
+import re
+import shlex
 import sys
 from pathlib import Path, PurePosixPath
 
@@ -84,6 +86,79 @@ def verdict(path_str: str, cfg: dict, lane: dict | None = None) -> str | None:
     return None
 
 
+# ---------------------------------------------------------------------------
+# Shell commands. The edit tools are not the only way to change a file: an
+# agent blocked from Edit will reach for `sed -i`, `>`, `cp` or a one-line
+# Python script, and a guard that only watches Edit/Write promises more than
+# it enforces. This is a best-effort check, deliberately biased to refuse:
+#   - an explicit write target (redirect, tee, sed -i / perl -i, cp/mv/install
+#     destination, touch/truncate/rm) is judged exactly like an edit, lane
+#     ownership included;
+#   - any OTHER mention of a protected path or locked test, in a command that
+#     can write (a scripting one-liner, git checkout/restore, PowerShell
+#     Set-Content...), is refused, because what it writes cannot be parsed.
+# Reading a protected path (cat, grep, pytest, diff) is always allowed.
+# ---------------------------------------------------------------------------
+
+_REDIRECT = re.compile(r"(?:^|[^<>&0-9])(?:[12]|&)?>>?\s*([^\s;&|<>()]+)")
+_WRITE_VERBS = {"tee", "cp", "mv", "install", "ln", "rm", "rmdir", "touch", "truncate", "dd", "chmod", "chown", "unlink", "shred"}
+_DEST_LAST = {"cp", "mv", "install", "ln"}
+_INPLACE = {"sed", "perl", "ruby"}
+_ANY_WRITE = re.compile(
+    r"(?:(?:^|[;&|(\s])(?:python3?|py|node|deno|bun|ruby|perl|php|powershell|pwsh)(?:\.exe)?\s.*(?:open\s*\(|write|unlink|remove|rename|replace)"
+    r"|\bgit\s+(?:checkout|restore|rm|mv|apply|stash|reset|clean)\b"
+    r"|\b(?:Set-Content|Add-Content|Out-File|Remove-Item|Move-Item|Copy-Item|New-Item|Clear-Content)\b"
+    r"|\bsed\b.*\s-i|\bperl\b.*\s-[a-zA-Z]*i)",
+    re.IGNORECASE | re.DOTALL,
+)
+
+
+def _words(segment: str) -> list[str]:
+    try:
+        return shlex.split(segment, posix=True)
+    except ValueError:  # unbalanced quotes: fall back to whitespace
+        return segment.split()
+
+
+def write_targets(command: str) -> list[str]:
+    """Paths a shell command explicitly writes to (best effort)."""
+    targets = [m.group(1) for m in _REDIRECT.finditer(command) if m.group(1) not in ("/dev/null", "nul", "NUL")]
+    for segment in re.split(r"[;&|\n]+", command):
+        words = _words(segment.strip())
+        while words and ("=" in words[0] and not words[0].startswith("-")):
+            words = words[1:]  # VAR=value prefixes
+        if not words:
+            continue
+        verb = Path(words[0]).name
+        args = [w for w in words[1:] if not w.startswith("-")]
+        if verb in _DEST_LAST and args:
+            targets.append(args[-1])
+        elif verb in _WRITE_VERBS:
+            targets.extend(args)
+        elif verb in _INPLACE and any(w.startswith("-i") or (w.startswith("-") and "i" in w[1:] and verb != "sed") for w in words[1:]):
+            targets.extend(args[1:] if verb == "sed" else args)
+    return targets
+
+
+def _mentions(command: str, cfg: dict) -> list[str]:
+    """Protected paths and locked tests the command names anywhere."""
+    text = command.replace("\\", "/")
+    names = list(cfg["protected_files"]) + list(cfg["acceptance_tests"]) + list(cfg["protected_prefixes"])
+    return [n for n in names if n and n not in cfg["allowed_files"] and n.rstrip("/") in text]
+
+
+def bash_verdict(command: str, cfg: dict, lane: dict | None = None) -> str | None:
+    for target in write_targets(command):
+        reason = verdict(target, cfg, lane)
+        if reason:
+            return f"this shell command writes {reason}"
+    hit = _mentions(command, cfg)
+    if hit and _ANY_WRITE.search(command):
+        return (f"this shell command can write and names {', '.join(hit)}, which the agent must not change. "
+                "Reading it is fine (cat, grep, pytest); changing it is the human's call.")
+    return None
+
+
 def main() -> int:
     raw = sys.stdin.read()
     try:
@@ -92,10 +167,14 @@ def main() -> int:
         print("guard.py: payload was not JSON; allowing", file=sys.stderr)
         return 1
     tool_input = payload.get("tool_input") or {}
-    path = tool_input.get("file_path") or tool_input.get("notebook_path")
-    if not path:
-        return 0
-    reason = verdict(path, load_config(), load_lane())
+    command = tool_input.get("command")
+    if isinstance(command, str) and command.strip():
+        reason = bash_verdict(command, load_config(), load_lane())
+    else:
+        path = tool_input.get("file_path") or tool_input.get("notebook_path")
+        if not path:
+            return 0
+        reason = verdict(path, load_config(), load_lane())
     if reason:
         print(f"BLOCKED by .claude/hooks/guard.py: {reason}", file=sys.stderr)
         return 2

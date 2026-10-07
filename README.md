@@ -22,20 +22,27 @@ Requirements: Python 3 for the hooks (standard library only) and, ideally, pytes
 
 ## What you get
 
-**Solo loop**
+**Every day, in any repository** (on as soon as it is installed)
+
+| file | job |
+|---|---|
+| `CLAUDE.md` | the working agreement: plan first, small steps, tests before code, never weaken a test, the model proposes and code decides, one module calls a model, one task per session. Plus project facts you fill in |
+| `.claude/settings.json` | wires the hooks below |
+| `.claude/hooks/guard.py` | **PreToolUse, edit tools AND shell:** refuses changes to protected inputs and locked acceptance tests, and in a lane anything outside the lane's paths (exit 2, reason shown to the agent). A blocked `Edit` cannot be routed around with `sed -i`, `>`, `cp` or a one-line script. Paths in `.claude/guard.json` |
+| `.claude/hooks/run_tests.py` | **PostToolUse:** runs the tests after every edit; the whole suite while it takes under 20 s, only the edited file's tests once it is slower, nothing for prose. Failures go straight back to the agent. `"test_scope": "all"/"changed"` in `guard.json` overrides |
+| `.claude/hooks/context_budget.py` | **UserPromptSubmit:** silent until the session's context passes 150k tokens, then tells the agent to suggest `NOTES.md` and a fresh session; at 300k it asks it to wrap up first. Thresholds in `guard.json` |
+| `.claude/agents/reviewer.md` | read-only reviewer with a fresh context: an agent grading its own work passes itself |
+| `PROMPT.md`, `PLAN.md`, `NOTES.md`, `DECISIONS.md` | the request and answers; the plan with a test per step; state across `/clear`; what was proposed, chosen, and why |
+| `/next` | take the next plan step, plan first |
+
+**Build day (opt-in: silent until you start the clock)**
 
 | file | job |
 |---|---|
 | `CARD.md` | the whole day on one page: what to do and what to say at each moment; keep it open |
-| `RUNBOOK.md` | **start here:** the build day step by step, with modes for a new problem, an existing codebase, team mode and shipping; time boxes, copy-paste prompts, the commit that closes each phase |
-| `CLAUDE.md` | the working agreement: plan first, small steps, tests before code, never weaken a test, the model proposes and code decides, one module calls a model. Plus project facts you fill in |
-| `.claude/settings.json` | wires two hooks into every edit |
-| `.claude/hooks/guard.py` | **PreToolUse:** refuses edits to protected inputs and acceptance tests, and in a lane, anything outside the lane's paths (exit 2, reason shown to the agent). Paths in `.claude/guard.json` |
-| `.claude/hooks/run_tests.py` | **PostToolUse:** runs the tests after every edit; failures go straight back to the agent |
-| `.claude/agents/reviewer.md` | read-only reviewer with a fresh context: an agent grading its own work passes itself |
-| `scripts/clock.py` + a UserPromptSubmit hook | **the build-day clock:** `clock.py start --demo 16:30` once; every prompt then carries time-to-demo, and the agent warns you when a check-in or milestone (plan, tests, slice, stop, README, demo) is due or overdue. Check-ins are logged to `CHECKINS.md` |
-| `/checkin`, `/next` | status in four lines, logged with the clock; take the next plan step, plan first |
-| `PROMPT.md`, `PLAN.md`, `NOTES.md`, `DECISIONS.md` | the request and answers; the plan with a test per step; state across `/clear`; what was proposed, chosen, and why |
+| `RUNBOOK.md` | the build day step by step, with modes for a new problem, an existing codebase, team mode and shipping; time boxes, copy-paste prompts, the commit that closes each phase |
+| `scripts/clock.py` + a UserPromptSubmit hook | **the build-day clock:** `clock.py start --demo 16:30` once; every prompt then carries time-to-demo, and the agent warns you when a check-in or milestone (plan, tests, slice, stop, README, demo) is due or overdue. Check-ins are logged to `CHECKINS.md`. Says nothing until started |
+| `/checkin`, `/questions` | status in four lines, logged with the clock; who to ask what, from the prompt |
 
 **Team mode: agents as an engineering team**
 
@@ -78,6 +85,15 @@ Then `/next`, review, commit, repeat; `/checkin` every half hour.
 An instruction in a prompt is a request. A hook is a rule. "Never edit the
 tests to make them pass" works far better when the edit is physically refused
 and the agent is told why. The same goes for input data and audit records.
+
+A rule is only as good as its coverage. An agent refused at `Edit` will often
+reach for the shell next, so the guard reads shell commands too: explicit
+write targets (redirects, `tee`, `sed -i`, `cp`/`mv` destinations, `rm`,
+`touch`) are judged exactly like an edit, and any command that can write and
+names a protected path anywhere (a Python one-liner, `git checkout --`,
+`Set-Content`) is refused. Reading protected files stays allowed. It is a
+best-effort parser biased to refuse, not a sandbox: for a hard boundary, also
+make those paths read-only on disk or deny them in Claude Code's permissions.
 
 ## Examples
 

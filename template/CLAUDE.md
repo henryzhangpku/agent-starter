@@ -10,11 +10,14 @@ parts that can be enforced mechanically; `.claude/guard.json` says which paths.
    will touch, and the test that proves it. Wait for a go on anything that
    changes behaviour.
 2. **Small steps.** One plan step per change. The PostToolUse hook runs the
-   tests after every edit and reports failures; fix them before moving on.
+   tests after every edit (the whole suite while it is fast, the edited
+   file's own tests once it is slow) and reports failures; fix them before
+   moving on. The full suite always runs at `/integrate` and `/ship`.
 3. **Tests before code.** Write or extend the test, watch it fail, make it pass.
 4. **Never weaken a test.** Acceptance tests are blocked from editing by
-   `.claude/hooks/guard.py`. If one is wrong, stop and say so; do not edit
-   around it, skip it, or mark it expected-to-fail.
+   `.claude/hooks/guard.py`, through the edit tools and through the shell
+   alike. If one is wrong, stop and say so; do not edit around it, skip it,
+   mark it expected-to-fail, or reach for `sed`/`>`/a script to change it.
 5. **The model extracts or proposes, code decides.** Scores, thresholds, money,
    identity and compliance checks are deterministic, tested code that fails
    closed. A model may fill a typed schema; it never makes the decision.
@@ -26,6 +29,11 @@ parts that can be enforced mechanically; `.claude/guard.json` says which paths.
    on a command line.
 10. **Honest results.** Report what the tests and metrics say, including
     regressions. If unsure about a requirement or data shape, ask.
+11. **One task per session.** When the `[context]` line appears, finish the
+    current step, write `NOTES.md` (done, in progress, open questions,
+    gotchas), commit, and tell the human to start a fresh session. A fresh
+    session that reads `PLAN.md` and `NOTES.md` beats a long one that re-reads
+    everything on every turn.
 
 ## Project facts (fill in during the first ten minutes)
 

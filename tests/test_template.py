@@ -192,3 +192,136 @@ def test_loop_counts_open_items_and_dry_run(project):
     importlib.reload(loop)
     assert loop.open_items() == 3
     sys.path.remove(str(project / "scripts"))
+
+
+# --- the guard also watches the shell -----------------------------------------
+
+def guard_bash(project, command):
+    payload = json.dumps({"tool_name": "Bash", "tool_input": {"command": command}})
+    return subprocess.run([sys.executable, str(project / ".claude/hooks/guard.py")],
+                          input=payload, capture_output=True, text=True)
+
+
+def lock(project):
+    subprocess.run([sys.executable, str(project / "scripts/lock_tests.py"), "tests/test_acceptance.py"],
+                   capture_output=True, text=True, cwd=project)
+
+
+@pytest.mark.parametrize("command", [
+    "sed -i 's/assert/# assert/' tests/test_acceptance.py",
+    "echo 'pass' > tests/test_acceptance.py",
+    "cat new.py >> tests/test_acceptance.py",
+    "printf x | tee data/calls.jsonl",
+    "cp /tmp/fake.csv data/x.csv",
+    "mv tests/test_acceptance.py tests/old.py && touch tests/test_acceptance.py",
+    "rm data/calls.jsonl",
+    "python -c \"open('tests/test_acceptance.py','w').write('')\"",
+    "git checkout -- tests/test_acceptance.py",
+    "perl -pi -e 's/1/2/' data/x.csv",
+    "Set-Content -Path data/x.csv -Value ''",
+])
+def test_guard_blocks_shell_writes_to_protected_paths(project, command):
+    lock(project)
+    r = guard_bash(project, command)
+    assert r.returncode == 2, command
+    assert "BLOCKED" in r.stderr
+
+
+@pytest.mark.parametrize("command", [
+    "cat tests/test_acceptance.py",
+    "python -m pytest -q tests/test_acceptance.py",
+    "grep -n assert tests/test_acceptance.py > /tmp/asserts.txt",
+    "diff data/calls.jsonl /tmp/other.jsonl",
+    "echo hi > src/app.py",
+    "sed -i 's/a/b/' src/app.py",
+    "git status",
+    "git commit -m 'step 3'",
+])
+def test_guard_allows_shell_reads_and_unprotected_writes(project, command):
+    lock(project)
+    assert guard_bash(project, command).returncode == 0, command
+
+
+def test_guard_shell_respects_lane_ownership(project):
+    (project / ".claude/lane.json").write_text(json.dumps({"task": "T3", "owns": ["src/report/"]}))
+    assert guard_bash(project, "echo x > src/report/a.py").returncode == 0
+    assert guard_bash(project, "echo x > src/other.py").returncode == 2
+
+
+def test_settings_wire_the_guard_to_the_shell(project):
+    s = json.loads((project / ".claude/settings.json").read_text())
+    shell = [m for m in s["hooks"]["PreToolUse"] if "Bash" in m["matcher"]]
+    assert shell and "guard.py" in shell[0]["hooks"][0]["command"]
+
+
+# --- tests scoped to the edit once the suite is slow --------------------------
+
+def run_tests_hook(project, edited):
+    payload = json.dumps({"tool_name": "Edit", "tool_input": {"file_path": str(edited)}})
+    return subprocess.run([sys.executable, str(project / ".claude/hooks/run_tests.py")],
+                          input=payload, capture_output=True, text=True, cwd=project)
+
+
+def test_run_tests_skips_prose_and_scopes_when_slow(project):
+    assert run_tests_hook(project, project / "NOTES.md").stdout == ""
+    (project / "src").mkdir(exist_ok=True)
+    (project / "src" / "pricing.py").write_text("def f():\n    return 1\n")
+    (project / "tests" / "test_pricing.py").write_text("def test_f():\n    assert True\n")
+    (project / ".claude" / "test_timing.json").write_text(json.dumps({"full_seconds": 999}))
+    r = run_tests_hook(project, project / "src" / "pricing.py")
+    if "pytest is not installed" in r.stdout:
+        pytest.skip("pytest not importable by the hook interpreter")
+    assert r.returncode == 0, r.stderr
+    assert "scoped to this edit" in r.stdout
+    r = run_tests_hook(project, project / "src" / "nothing_maps_here.py")
+    assert "no tests belong to" in r.stdout
+
+
+def test_run_tests_maps_files_to_their_tests(project):
+    sys.path.insert(0, str(project / ".claude" / "hooks"))
+    try:
+        import importlib
+        rt = importlib.import_module("run_tests")
+        importlib.reload(rt)
+        rt.ROOT = project
+        (project / "tests" / "billing").mkdir(parents=True)
+        a = project / "tests" / "test_ledger.py"; a.write_text("")
+        b = project / "tests" / "billing" / "test_invoice.py"; b.write_text("")
+        assert rt.tests_for(project / "src" / "ledger.py") == [a]
+        assert b in rt.tests_for(project / "src" / "billing" / "anything.py")
+        assert rt.tests_for(a) == [a]
+    finally:
+        sys.path.pop(0)
+        sys.modules.pop("run_tests", None)
+
+
+# --- the context budget -------------------------------------------------------
+
+def budget(project, transcript):
+    payload = json.dumps({"transcript_path": str(transcript)})
+    return subprocess.run([sys.executable, str(project / ".claude/hooks/context_budget.py")],
+                          input=payload, capture_output=True, text=True)
+
+
+def transcript_with(tmp_path, tokens):
+    t = tmp_path / "session.jsonl"
+    rows = [{"type": "user", "message": {"role": "user", "content": "hi"}},
+            {"type": "assistant", "message": {"usage": {"input_tokens": 10, "cache_read_input_tokens": tokens - 10,
+                                                        "cache_creation_input_tokens": 0, "output_tokens": 50}}}]
+    t.write_text("\n".join(json.dumps(r) for r in rows))
+    return t
+
+
+def test_context_budget_silent_then_warns_then_stops(project, tmp_path):
+    assert budget(project, transcript_with(tmp_path, 40_000)).stdout == ""
+    assert "suggest updating NOTES.md" in budget(project, transcript_with(tmp_path, 180_000)).stdout
+    out = budget(project, transcript_with(tmp_path, 320_000)).stdout
+    assert "Before anything else" in out and "/clear" in out
+    assert budget(project, tmp_path / "missing.jsonl").stdout == ""
+
+
+def test_settings_wire_the_context_budget(project):
+    s = json.loads((project / ".claude/settings.json").read_text())
+    cmds = [h["command"] for m in s["hooks"]["UserPromptSubmit"] for h in m["hooks"]]
+    assert any("context_budget.py" in c for c in cmds)
+    assert any("clock.py hook" in c for c in cmds)

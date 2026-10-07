@@ -9,6 +9,15 @@
             "command": "python3 .claude/hooks/guard.py || python .claude/hooks/guard.py"
           }
         ]
+      },
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/guard.py || python .claude/hooks/guard.py"
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -29,6 +38,10 @@
           {
             "type": "command",
             "command": "python3 scripts/clock.py hook || python scripts/clock.py hook"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/context_budget.py || python .claude/hooks/context_budget.py"
           }
         ]
       }
