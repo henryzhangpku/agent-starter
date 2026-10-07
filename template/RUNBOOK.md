@@ -225,7 +225,7 @@ held-out set once, at the end, and say so.
 
 ---
 
-## Phase 11 (practice builds). Open-source it
+## Phase 9b (practice builds). Open-source it
 
 `/publish` prepares README, licence, demo page and a post draft after the
 checks (secrets, names, data provenance). You create the repo and push;
