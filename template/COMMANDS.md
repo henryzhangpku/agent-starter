@@ -3,7 +3,7 @@
 The only input is what the prompt setter says. Then type **`/step`**, again
 and again. Each time it works out where you are, does the next step, and
 stops at a gate where you decide or talk. If it needs something from you, it
-asks. Every reply ends with the same block: **Where** you are, what to **Say**, the **Reply** to type, and what comes **Then**.
+asks. Every reply ends with the same four short lines: 📍 where you are, 🗣 what to say, ⏎ what to type, ⏭ what comes next.
 **`/step` is your only reply:** bare `/step` accepts its recommendation;
 `/step <your words>` gives answers, edits or a different decision.
 

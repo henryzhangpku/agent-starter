@@ -70,12 +70,18 @@ end: implement, review, apply the reviewers' recommended non-blocking fixes
 (with a test), commit, and move on. Mention what you fixed in one line; do
 not stop to ask about it. Keep replies to one screen.
 
-**End every reply with this block, always, in this order:**
+**End every reply with this block, always.** Four short lines, plain words,
+no jargon, each under 90 characters, so I can read it in two seconds:
 
 ```
-Where:  <step n/8 and sub-progress, e.g. "6/8 Build, plan step 6 of 6">
-Say:    "<the exact words for me to say to the room now>" (or: nothing)
-Reply:  /step                  -> <what a bare /step does: your recommendation>
-        /step <...>            -> <only if there is a choice: the alternative, in a few words>
-Then:   <what comes after that, e.g. "commit, then Demo prep at 13:10">
+📍 Step 7 of 8 · Build · last task: check our answers
+🗣 "Our answer key is done. Could you check ten rows for me?"
+⏎ /step = commit it   ·   /step <their corrections> = fix rows first
+⏭ 11:42 check-in, then the final report
 ```
+- 📍 where we are: step n of 8, its name, the current task in a few words.
+- 🗣 what I say to the room: at most 25 words, one or two sentences, said
+  the way a person talks. No file names, no counts unless they matter.
+- ⏎ what I type: bare `/step` and what it does; one alternative only if
+  there is a real choice.
+- ⏭ what comes next.
