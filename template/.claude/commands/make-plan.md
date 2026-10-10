@@ -24,8 +24,13 @@ demo. The page must reach the **MVP demo bar** (the first ITERATE round):
 prompt as given (from PROMPT.md) and the answers that shaped it, then our
 solution in plain words (what it does, how it works, why we chose it, with
 the key decisions from DECISIONS.md), then the headline numbers against the
-baseline with the main weakness beside them; one switch (`?view=customer` or
-a toggle) hides this section for a customer-facing demo;
+baseline with the main weakness beside them; then **How we spent the day**: a
+timeline built from the clock and `git log` (questions asked and who
+answered, plan agreed, done-tests locked, MVP shipped, each iterate round
+with whose feedback it came from, each change request and the trade-off we
+made, tests passing), so the team sees how the time was used and who
+helped; one switch (`?view=customer` or a toggle) hides both sections for a
+customer-facing demo;
 (a2) then the product itself, the software hook; (b) three guided
 scenes on real records, as buttons: the everyday case, the case it refuses
 or flags on purpose, the hard case; (c) try your own input; (d) every
