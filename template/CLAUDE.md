@@ -35,7 +35,7 @@ parts that can be enforced mechanically; `.claude/guard.json` says which paths.
     session that reads `PLAN.md` and `NOTES.md` beats a long one that re-reads
     everything on every turn.
 
-## Project facts (fill in during the first ten minutes)
+## Project facts (`/scaffold` fills these in; correct them if wrong)
 
 - The human follows `RUNBOOK.md`. Problem: `PROMPT.md`. Plan: `PLAN.md`. State between sessions: `NOTES.md`.
   Decisions: `DECISIONS.md`.

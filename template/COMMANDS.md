@@ -17,6 +17,7 @@ asks. Every reply ends with `Say:` (your words to the room) and `Next:`.
 | 1 | **Capture**: your notes of what was said become PROMPT.md | read back three assumptions; start the clock |
 | 2 | **Ask**: the questions that matter | ask three out loud, type the answers |
 | 3 | **Plan**: thinnest slice first, cut list, risks | edit out loud, type `save` |
+| 3b | **Skeleton**: package, data contract, one run command, CLAUDE.md facts, guard paths | approve the layout, type `go` |
 | 4 | **Done-tests**: failing acceptance tests, locked | type `go`, say the minute-30 line |
 | 5 | **Split**: contracts and parallel tasks | approve the split out loud |
 | 6 | **Build**: waves of parallel agents, or one step at a time | read every diff, narrate, `go` to commit; demo the first end-to-end slice |
@@ -25,7 +26,7 @@ asks. Every reply ends with `Say:` (your words to the room) and `Next:`.
 
 ## You can still call any step directly
 
-`/capture` `/questions` `/make-plan` `/make-tests` `/team-plan` `/dispatch N`
+`/capture` `/questions` `/make-plan` `/scaffold` `/make-tests` `/team-plan` `/dispatch N`
 `/integrate` `/next` `/checkin` `/demo-prep` · handed existing code: `/onboard` first.
 
 ## If something goes wrong

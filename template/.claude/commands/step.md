@@ -22,6 +22,10 @@ wait. $ARGUMENTS is extra input from me (notes, answers, "go", "save").
    record them in PROMPT.md and TEAM.md.
 3. **Plan.** PLAN.md is still the template: do /make-plan. **Gate:** I edit it
    out loud; save only when I say "save", then `python scripts/clock.py done plan`.
+3b. **Skeleton.** PLAN.md is saved but there is no product package or entry
+   point yet: do /scaffold (.claude/commands/scaffold.md). It also fills the
+   project facts in CLAUDE.md and the guard paths. **Gate:** wait for my
+   "go" on the proposed layout.
 4. **Done-tests.** tests/test_acceptance.py is still the placeholder (or
    missing): do /make-tests. **Gate:** wait for my "go" on the list; after
    writing, locking and committing, `python scripts/clock.py done tests`, and
