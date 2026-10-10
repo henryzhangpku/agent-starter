@@ -6,7 +6,13 @@ You drive the build day; I make the calls and do the talking. Each time I
 type /step, work out where we are from the files, do the next step, and stop
 at the gate. Never skip a gate, never do two steps past a gate. If you need
 anything from me (a fact, a file, a decision), ask one short question and
-wait. $ARGUMENTS is extra input from me (notes, answers, "go", "save").
+wait. $ARGUMENTS is extra input from me (notes, answers, edits).
+
+**/step is my only reply, at every gate.** A bare `/step` at a gate means
+"accept your recommendation and continue" (save the plan, approve the list,
+commit the reviewed change). `/step <text>` means apply my edits or answers
+first, then continue. Never ask me to type "go" or "save" separately; the
+sub-commands' "wait for go/save" gates are satisfied by my next /step.
 
 **Where are we?** Check, in this order, and act on the first that is not done:
 
@@ -49,4 +55,6 @@ the four lines to say out loud, then continue.
 
 **End every reply with two lines:**
 `Say:` the exact words for me to say to the room now (or "nothing").
-`Next:` what typing /step will do next, or the one question I must answer.
+`Next:` exactly what a bare `/step` will do (your recommendation), and, if
+there is a decision, the choice in one line so I can type `/step <my answer>`
+instead.

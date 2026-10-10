@@ -4,6 +4,8 @@ The only input is what the prompt setter says. Then type **`/step`**, again
 and again. Each time it works out where you are, does the next step, and
 stops at a gate where you decide or talk. If it needs something from you, it
 asks. Every reply ends with `Say:` (your words to the room) and `Next:`.
+**`/step` is your only reply:** bare `/step` accepts its recommendation;
+`/step <your words>` gives answers, edits or a different decision.
 
 **Before they speak** (empty folder):
 
@@ -16,11 +18,11 @@ asks. Every reply ends with `Say:` (your words to the room) and `Next:`.
 |---|---|---|
 | 1 | **Capture**: your notes of what was said become PROMPT.md | read back three assumptions; start the clock |
 | 2 | **Ask**: the questions that matter | ask three out loud, type the answers |
-| 3 | **Plan**: thinnest slice first, cut list, risks | edit out loud, type `save` |
-| 3b | **Skeleton**: package, data contract, one run command, CLAUDE.md facts, guard paths | approve the layout, type `go` |
-| 4 | **Done-tests**: failing acceptance tests, locked | type `go`, say the minute-30 line |
+| 3 | **Plan**: thinnest slice first, cut list, risks | edit out loud; `/step` saves (or `/step <edits>`) |
+| 3b | **Skeleton**: package, data contract, one run command, CLAUDE.md facts, guard paths | `/step` approves (or `/step <changes>`) |
+| 4 | **Done-tests**: failing acceptance tests, locked | `/step` approves; say the minute-30 line |
 | 5 | **Split**: contracts and parallel tasks | approve the split out loud |
-| 6 | **Build**: waves of parallel agents, or one step at a time | read every diff, narrate, `go` to commit; demo the first end-to-end slice |
+| 6 | **Build**: waves of parallel agents, or one step at a time | read the summaries, narrate; `/step` commits; demo the first end-to-end slice |
 | 7 | **Demo prep**: README, decisions, walkthrough | rehearse once out loud |
 | ↻ | **Check-in**, automatically every 30 minutes | say the four lines; STATUS.md updates for anyone who looks |
 
