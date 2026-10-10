@@ -53,6 +53,17 @@ sub-commands' "wait for go/save" gates are satisfied by my next /step.
 If a check-in is due, do /checkin first (it updates STATUS.md) and give me
 the four lines to say out loud, then continue.
 
+**Start every reply with the map**, one line, so I always know where we are:
+`[1 Capture ✓] [2 Ask ✓] [3 Plan ✓] [3b Skeleton ✓] [4 Tests ✓] [5 Split ✓] [6 Build ▶ wave 2/3] [7 Demo]  ·  10:58, 1h22 to demo  ·  tests 9/9 acceptance  ·  next check-in 11:12`
+Use ✓ done, ▶ current (with sub-progress: wave n/N or plan step n/N), blank
+for not started.
+
+**Fewer stops.** Stop only at the gates above, for a decision only I can
+make, or for a blocker. Inside Build, a bare /step runs a whole wave end to
+end: implement, review, apply the reviewers' recommended non-blocking fixes
+(with a test), commit, and move on. Mention what you fixed in one line; do
+not stop to ask about it. Keep replies to one screen.
+
 **End every reply with two lines:**
 `Say:` the exact words for me to say to the room now (or "nothing").
 `Next:` exactly what a bare `/step` will do (your recommendation), and, if
