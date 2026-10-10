@@ -8,7 +8,8 @@ dataset with the hard cases the answers mention, plus a held-out slice. Propose 
 the thinnest end-to-end slice first, then improvements in priority order.
 For each step: what it produces and the test that proves it. Then the cut
 list (what we drop if short on time), the risks, and the three things the
-demo will show. Keep it to one screen.
+demo will show. Size it to the day: the fewest modules and the least code that meet the
+answers; a senior engineer should find nothing to delete. Keep it to one screen.
 
 Stop and wait. I will edit it out loud. When I say "save", write it to
 PLAN.md in its existing structure (a checkbox and a test name per step, the

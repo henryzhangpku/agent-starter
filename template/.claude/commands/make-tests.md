@@ -2,7 +2,7 @@
 description: Step 3 - write the failing acceptance tests from PLAN.md, then lock and commit them
 ---
 
-From PLAN.md and the skeleton's entry point and contract, propose 5 to 8 acceptance tests in plain English: end-to-end
+From PLAN.md and the skeleton's entry point and contract, propose 5 to 8 behaviour-level acceptance tests (no implementation details, no near-duplicates) in plain English: end-to-end
 behaviour the demo depends on (every input gets one output, outputs valid,
 the rules from TEAM.md hold, bad input goes to a review list). List them and
 wait for my go; I may cut or add.

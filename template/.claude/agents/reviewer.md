@@ -25,6 +25,11 @@ check against that.
    `python -m pytest -q` and report the result.
 5. **Failure paths.** Errors fail closed; nothing swallows an exception silently.
 6. **Secrets.** No key, token or credential in code, logs or commands.
+7. **Simplicity, as a senior engineer would judge it.** Flag: code that could
+   be half as long; abstractions with one caller; defensive checks for cases
+   that cannot happen; duplicated logic; vague names; comments that restate
+   the code; tests that repeat each other or test implementation details
+   rather than behaviour. Over-building is a finding, not a style note.
 
 ## What you may change
 
