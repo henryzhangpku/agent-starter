@@ -32,7 +32,7 @@ We are stopping feature work. Do these in order and do not add features:
 6b. Build **the internal pitch**: `/pitch` on the same server, one HTML file,
    no libraries, arrow keys and click to advance, readable from the back of a
    room, same look as the demo page. A short internal pitch, not a fundraise:
-   eight slides, one idea each, real numbers only:
+   nine slides, one idea each, real numbers only:
    1. The problem: their prompt in one line, and who feels it.
    2. What we heard: the questions I asked and the answers that shaped it.
    3. The solution: what it does and how, in one picture or flow.
@@ -40,8 +40,12 @@ We are stopping feature work. Do these in order and do not add features:
    5. Results: the headline numbers against the baseline, the weakness beside them.
    6. How we spent the day: the timeline, MVP time, feedback rounds, the
       change and its trade-off, thanks by name.
-   7. Gaps and next week: what it gets wrong, the roadmap, what it needs from them.
-   8. How I work: three lines (ask first, ship small with tests, decide with
+   7. Gaps: what it gets wrong today, and how we know.
+   8. Roadmap, grounded in their system: Now (today's MVP), Next week (close
+      the gaps, their real data through the loader, wire the API into their
+      service), Next month (scale, monitoring, the features the team asked
+      for); what each needs from them. Concrete, small, no fundraising talk.
+   9. How I work: three lines (ask first, ship small with tests, decide with
       the team), then "Questions?".
 7. Write WALKTHROUGH.md: a 5-minute spoken script that follows the pitch
    slide by slide (slide 4 switches to the live demo and back), in my voice (.claude/kit/VOICE.md), the case that I

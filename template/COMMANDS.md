@@ -33,7 +33,7 @@ Not Python? Set `"test_command"` there (`npm test`, `go test ./...`); Node, Go, 
 | 5 | **Split**: contracts and parallel tasks | approve the split out loud |
 | 6 | **Build**: waves of parallel agents, or one step at a time | read the summaries, narrate; `/step` commits; demo the first end-to-end slice |
 | 6b | **Iterate: MVP, feedback, next round**: plan done early? demo it, take their feedback, build it | invite the team to look; `/step <their feedback>` |
-| 7 | **Demo prep** (+ an 8-slide internal pitch at `/pitch`): README, decisions, walkthrough | rehearse once out loud |
+| 7 | **Demo prep** (+ a 9-slide internal pitch at `/pitch`, roadmap included): README, decisions, walkthrough | rehearse once out loud |
 | ↻ | **Check-in**, automatically every 30 minutes | say the four lines; STATUS.md updates for anyone who looks |
 
 ## The team changes something mid-build
