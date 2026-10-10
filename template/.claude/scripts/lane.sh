@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # Open an isolated lane for one task: its own git worktree and branch, with the
 # guard hook limited to the paths the task owns.
-#   scripts/lane.sh T3 src/report/ src/report_cli.py
+#   .claude/scripts/lane.sh T3 src/report/ src/report_cli.py
 # Then: cd ../lane-T3 && claude   (paste the printed brief as the first message)
 # Merge back from the main checkout:  git merge --no-ff lane/T3
 # Remove when merged:                 git worktree remove ../lane-T3 && git branch -d lane/T3
 set -euo pipefail
 
 if [ $# -lt 2 ]; then
-  echo "usage: scripts/lane.sh <task-id> <owned path> [<owned path> ...]" >&2
+  echo "usage: .claude/scripts/lane.sh <task-id> <owned path> [<owned path> ...]" >&2
   exit 1
 fi
 task="$1"; shift

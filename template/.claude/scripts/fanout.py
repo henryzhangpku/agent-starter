@@ -1,8 +1,8 @@
 """Fan one task out to several agents, then compare the results on evidence.
 
-  python scripts/fanout.py T3 --agents claude,claude,codex
-  python scripts/fanout.py --prompt-file IDEA.md --agents claude,gemini --minutes 20
-  python scripts/fanout.py T3 --agents claude,codex --dry-run
+  python .claude/scripts/fanout.py T3 --agents claude,claude,codex
+  python .claude/scripts/fanout.py --prompt-file IDEA.md --agents claude,gemini --minutes 20
+  python .claude/scripts/fanout.py T3 --agents claude,codex --dry-run
 
 Each attempt gets its own git worktree and branch (../fan-<name>-<i>, branch
 fan/<name>/<i>) from the current HEAD, and its own headless agent session with
@@ -19,7 +19,7 @@ failures, no out-of-scope edits, smaller diff. You read the top two diffs and
 merge one:
 
   git merge --no-ff fan/T3/2
-  python scripts/fanout.py --cleanup T3      # remove all fan-T3-* worktrees and branches
+  python .claude/scripts/fanout.py --cleanup T3      # remove all fan-T3-* worktrees and branches
 
 The ranking is evidence for your decision, not the decision. Same-model
 attempts differ more than you'd expect; different models differ more still.
@@ -40,7 +40,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import agent_cli  # noqa: E402
 
-ROOT = HERE.parent
+ROOT = HERE.parents[1]
 PROMPT_FILE = ROOT / ".claude" / "kit" / "FANOUT_PROMPT.md"
 COMPARE = ROOT / "COMPARE.md"
 
@@ -120,7 +120,7 @@ def write_compare(name: str, base: str, results: list[dict]) -> None:
                      f"{len(r['files'])} | +{r['added']}/-{r['removed']} | {r['commits']} | {r['status']} |")
     best = rows[0]["branch"] if rows else ""
     lines += ["", "Next: read the top two diffs (`git diff " + base[:10] + ".." + best + "`), then",
-              f"`git merge --no-ff {best}` and `python scripts/fanout.py --cleanup {name}`.", ""]
+              f"`git merge --no-ff {best}` and `python .claude/scripts/fanout.py --cleanup {name}`.", ""]
     COMPARE.write_text("\n".join(lines), encoding="utf-8")
 
 

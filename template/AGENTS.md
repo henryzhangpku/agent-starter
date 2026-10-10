@@ -19,5 +19,5 @@ CONTRACTS.md (shared interfaces), NOTES.md (where things stand),
 DECISIONS.md (why).
 
 Note: Claude Code enforces parts of this with hooks; other agents are not
-hooked, so the harness scripts (`scripts/loop.py`, `scripts/fanout.py`) check
+hooked, so the harness scripts (`.claude/scripts/loop.py`, `.claude/scripts/fanout.py`) check
 their work with test runs and diffs instead.

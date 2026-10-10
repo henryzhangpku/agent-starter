@@ -1,7 +1,7 @@
 """Lock acceptance tests so the agent can no longer edit them.
 
-  python scripts/lock_tests.py tests/test_acceptance.py [more paths]
-  python scripts/lock_tests.py --list
+  python .claude/scripts/lock_tests.py tests/test_acceptance.py [more paths]
+  python .claude/scripts/lock_tests.py --list
 
 Run it right after the failing acceptance tests are written and committed
 (RUNBOOK Phase 4). Adds the paths to "acceptance_tests" in .claude/guard.json;
@@ -13,7 +13,7 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 CFG = ROOT / ".claude" / "guard.json"
 
 

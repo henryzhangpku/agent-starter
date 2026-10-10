@@ -22,7 +22,7 @@ import json
 import shutil
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 CLAUDE_ALLOWED = [
     "Read", "Edit", "Write", "Grep", "Glob",
     "Bash(python -m pytest *)", "Bash(python -m pytest)",

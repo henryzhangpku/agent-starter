@@ -82,9 +82,9 @@ It should repeat: plan first, small steps, tests first, protected tests. If it d
 
 **1.0 Start the clock** the moment the prompt is given, with the demo time you agree:
 ```
-python scripts/clock.py start --demo 16:30 --every 30
+python .claude/scripts/clock.py start --demo 16:30 --every 30
 ```
-Practice runs: `python scripts/clock.py start --budget 120` instead, run the
+Practice runs: `python .claude/scripts/clock.py start --budget 120` instead, run the
 build to completion, mark each milestone as you actually reach it
 (`clock.py done plan|tests|slice|green|stop|readme|demo`, where `green` means
 every acceptance test passes), and finish with `clock.py report` for the real
@@ -92,7 +92,7 @@ minutes per phase. That table is how you learn your own pace.
 
 From now on every prompt you send carries one line of time context, and the
 agent tells you when a check-in or milestone is due or overdue.
-`python scripts/clock.py status` shows the whole timeline.
+`python .claude/scripts/clock.py status` shows the whole timeline.
 
 **1.1 Write the prompt word for word** into `PROMPT.md` under *Word for word*,
 while it is being explained. Say: "Let me write that down exactly."
@@ -173,7 +173,7 @@ or tests an implementation detail.
 **4.5 Say the minute-30 line:** "Here's the plan and the N tests that define
 done. Thinnest slice first; I'll check in at <time>."
 
-**4.6 Lock them:** `python scripts/lock_tests.py tests/test_acceptance.py`
+**4.6 Lock them:** `python .claude/scripts/lock_tests.py tests/test_acceptance.py`
 (add any other acceptance test files). From now on the guard refuses any agent
 edit to them; you can still change them yourself if the team changes the spec.
 
@@ -203,7 +203,7 @@ format. **Demo it to the room**, even if it's ugly.
 
 Say the four lines out loud: works, next, deciding, risk. It fills the row in
 `PLAN.md` and logs the time to `CHECKINS.md`, so the clock stops nagging. Mark
-milestones as you hit them: `python scripts/clock.py done slice` (plan, tests,
+milestones as you hit them: `python .claude/scripts/clock.py done slice` (plan, tests,
 slice, stop, readme). Before lunch and before any `/clear`, also:
 > Update NOTES.md: what is done, what is in progress, open questions, gotchas.
 
@@ -237,7 +237,7 @@ held-out set once, at the end, and say so.
 
 When the remaining plan items are small, specified and covered by tests:
 ```
-python scripts/loop.py --iterations 4 --minutes 15      # --dry-run first to see the command
+python .claude/scripts/loop.py --iterations 4 --minutes 15      # --dry-run first to see the command
 ```
 Fresh headless sessions take one item per pass, keep the tests green, commit,
 and log to LOOP.md; it stops when done, stalled twice, or at the limit.
@@ -328,7 +328,7 @@ commit per task after your approval.
 **T.5 Heavier isolation, when tasks run long:** a separate session per task
 in its own worktree, with the guard enforcing ownership:
 ```
-scripts/lane.sh T3 src/report/          # Windows: scripts\lane.ps1 T3 src/report/
+.claude/scripts/lane.sh T3 src/report/          # Windows: scripts\lane.ps1 T3 src/report/
 cd ../lane-T3 && claude                  # paste the printed brief
 git merge --no-ff lane/T3                # from the main checkout, after review
 ```
@@ -336,7 +336,7 @@ git merge --no-ff lane/T3                # from the main checkout, after review
 **T.6 Best-of-N for the risky task.** When one task is hard or ambiguous,
 fan it out instead of hoping the first attempt is right:
 ```
-python scripts/fanout.py T3 --agents claude,claude,codex --minutes 20
+python .claude/scripts/fanout.py T3 --agents claude,claude,codex --minutes 20
 ```
 Each attempt runs in its own worktree; COMPARE.md ranks them by tests, scope
 and diff size. Read the top two diffs, merge one, `--cleanup T3`. Say it out

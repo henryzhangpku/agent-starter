@@ -8,7 +8,7 @@ We are stopping feature work. Do these in order and do not add features:
    demo is the page, not the terminal. Refresh its "How we spent the day" timeline from
    the clock and git log, credit people by name, and check it against the
    MVP demo bar in make-plan.md and fix any gap before writing the walkthrough.
-2. `python scripts/clock.py done stop`.
+2. `python .claude/scripts/clock.py done stop`.
 3. **Senior-engineer pass on the code** (the team will open the repo):
    use the reviewer on the whole product package, not a diff, for
    simplicity only. Apply the safe simplifications: delete dead code and
@@ -20,7 +20,7 @@ We are stopping feature work. Do these in order and do not add features:
    (plus code, tests, data). `git mv` PROMPT.md, PLAN.md and CONTRACTS.md
    into `docs/`, and TEAM.md, TASKS.md, NOTES.md, STATUS.md, CHECKINS.md,
    COMMANDS.md and AGENTS.md into `docs/process/` (delete any that still hold
-   only template text). Leave `.claude/` and `scripts/` (the tooling); README
+   only template text). Leave `.claude/` and `.claude/scripts/` (the tooling); README
    says in one line that they are the agent-starter tooling. Do not rewrite
    history.
 4b. Write `docs/TESTS.md`: a table of each test file, the behaviours it

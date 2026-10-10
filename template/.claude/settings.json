@@ -37,7 +37,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/clock.py\" hook || python \"$CLAUDE_PROJECT_DIR/scripts/clock.py\" hook"
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/scripts/clock.py\" hook || python \"$CLAUDE_PROJECT_DIR/.claude/scripts/clock.py\" hook"
           },
           {
             "type": "command",

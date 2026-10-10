@@ -25,14 +25,14 @@ def guard(project, file_path):
 
 def test_acceptance_tests_writable_until_locked(project):
     assert guard(project, project / "tests/test_acceptance.py").returncode == 0      # Phase 4: agent writes them
-    r = subprocess.run([sys.executable, str(project / "scripts/lock_tests.py"), "tests/test_acceptance.py"],
+    r = subprocess.run([sys.executable, str(project / ".claude/scripts/lock_tests.py"), "tests/test_acceptance.py"],
                        capture_output=True, text=True, cwd=project)
     assert r.returncode == 0 and "tests/test_acceptance.py" in r.stdout
     assert guard(project, project / "tests/test_acceptance.py").returncode == 2      # locked afterwards
 
 
 def test_guard_blocks_protected_and_acceptance(project):
-    subprocess.run([sys.executable, str(project / "scripts/lock_tests.py"), "tests/test_acceptance.py"],
+    subprocess.run([sys.executable, str(project / ".claude/scripts/lock_tests.py"), "tests/test_acceptance.py"],
                    capture_output=True, text=True, cwd=project)
     for target in ("data/calls.jsonl", "tests/test_acceptance.py", project / "data" / "x.csv"):
         r = guard(project, target if isinstance(target, Path) else project / target)
@@ -104,7 +104,7 @@ def test_lane_script_creates_worktree_with_ownership(project):
     run("git", "init", "-q", "-b", "main")
     run("git", "-c", "user.email=t@t", "-c", "user.name=t", "add", "-A")
     run("git", "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "init")
-    out = run(_bash(), "scripts/lane.sh", "T9", "src/report/").stdout
+    out = run(_bash(), ".claude/scripts/lane.sh", "T9", "src/report/").stdout
     lane = project.parent / "lane-T9"
     assert "Lane T9 ready" in out
     cfg = json.loads((lane / ".claude/lane.json").read_text())
@@ -118,7 +118,7 @@ def test_lane_script_creates_worktree_with_ownership(project):
 
 
 def clock(project, *args, stdin=""):
-    return subprocess.run([sys.executable, str(project / "scripts/clock.py"), *args], input=stdin,
+    return subprocess.run([sys.executable, str(project / ".claude/scripts/clock.py"), *args], input=stdin,
                           capture_output=True, text=True, cwd=project)
 
 
@@ -174,7 +174,7 @@ def test_clock_budget_and_report(project):
 
 
 def test_loop_decide_stop_rules(project):
-    sys.path.insert(0, str(project / "scripts"))
+    sys.path.insert(0, str(project / ".claude" / "scripts"))
     import importlib
     loop = importlib.import_module("loop")
     importlib.reload(loop)
@@ -184,24 +184,24 @@ def test_loop_decide_stop_rules(project):
     assert loop.decide(3, True, True, 0, 6, 6, 1, 30).startswith("limit")
     assert loop.decide(3, True, True, 0, 1, 6, 31, 30).startswith("limit")
     assert loop.decide(3, True, True, 1, 1, 6, 1, 30) is None
-    sys.path.remove(str(project / "scripts"))
+    sys.path.remove(str(project / ".claude" / "scripts"))
 
 
 def test_loop_counts_open_items_and_dry_run(project):
     (project / "PLAN.md").write_text("- [x] one\n- [ ] two\n  - [ ] three\n")
     (project / "TASKS.md").write_text("| id | wave | role | goal | owns | depends | done when | status |\n|---|---|---|---|---|---|---|---|\n"
                                        "| T1 | 1 | implementer | a | a/ | - | t | done |\n| T2 | 1 | implementer | b | b/ | - | t | todo |\n")
-    r = subprocess.run([sys.executable, str(project / "scripts/loop.py"), "--dry-run", "--claude", "claude"],
+    r = subprocess.run([sys.executable, str(project / ".claude/scripts/loop.py"), "--dry-run", "--claude", "claude"],
                        capture_output=True, text=True, cwd=project)
     assert r.returncode == 0
     assert "--permission-mode acceptEdits" in r.stdout and "--max-turns" in r.stdout
     assert "dangerously" not in r.stdout and "bypassPermissions" not in r.stdout
-    sys.path.insert(0, str(project / "scripts"))
+    sys.path.insert(0, str(project / ".claude" / "scripts"))
     import importlib
     loop = importlib.import_module("loop")
     importlib.reload(loop)
     assert loop.open_items() == 3
-    sys.path.remove(str(project / "scripts"))
+    sys.path.remove(str(project / ".claude" / "scripts"))
 
 
 # --- the guard also watches the shell -----------------------------------------
@@ -213,7 +213,7 @@ def guard_bash(project, command):
 
 
 def lock(project):
-    subprocess.run([sys.executable, str(project / "scripts/lock_tests.py"), "tests/test_acceptance.py"],
+    subprocess.run([sys.executable, str(project / ".claude/scripts/lock_tests.py"), "tests/test_acceptance.py"],
                    capture_output=True, text=True, cwd=project)
 
 
@@ -351,7 +351,7 @@ def test_settings_wire_the_context_budget(project):
 
 
 def test_agent_cli_builtins_and_override(project):
-    sys.path.insert(0, str(project / "scripts"))
+    sys.path.insert(0, str(project / ".claude" / "scripts"))
     import importlib
     ac = importlib.import_module("agent_cli")
     importlib.reload(ac)
@@ -365,7 +365,7 @@ def test_agent_cli_builtins_and_override(project):
     assert ac.command("fake", "hello") == ["python", "-c", "print(1)", "hello"]
     with pytest.raises(ValueError):
         ac.command("nope", "x")
-    sys.path.remove(str(project / "scripts"))
+    sys.path.remove(str(project / ".claude" / "scripts"))
 
 
 @pytest.mark.skipif(shutil.which("git") is None, reason="needs git")
@@ -383,7 +383,7 @@ def test_fanout_ranks_attempts_and_cleans_up(project):
     for c in (["git", "init", "-q", "-b", "main"], ["git", "add", "-A"],
               ["git", "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "init"]):
         run(*c)
-    env_cmd = [sys.executable, str(project / "scripts/fanout.py"), "--prompt-file", "PROMPT.md",
+    env_cmd = [sys.executable, str(project / ".claude/scripts/fanout.py"), "--prompt-file", "PROMPT.md",
                "--agents", "bad,good", "--minutes", "2"]
     r = subprocess.run(env_cmd, cwd=project, capture_output=True, text=True,
                        env={**__import__("os").environ, "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t",
@@ -394,7 +394,7 @@ def test_fanout_ranks_attempts_and_cleans_up(project):
     assert "fan/PROMPT/2" in rows[0] and "good" in rows[0] and "1 pass" in rows[0]
     assert "fan/PROMPT/1" in rows[1] and "fail" in rows[1]
     assert (project.parent / "fan-PROMPT-2").exists()
-    run(sys.executable, str(project / "scripts/fanout.py"), "--cleanup", "PROMPT")
+    run(sys.executable, str(project / ".claude/scripts/fanout.py"), "--cleanup", "PROMPT")
     assert not (project.parent / "fan-PROMPT-1").exists()
     assert "fan/PROMPT" not in run("git", "branch").stdout
 

@@ -1,10 +1,10 @@
 """A bounded Ralph loop: fresh agent sessions work through the plan one item at a time.
 
-  python scripts/loop.py --iterations 6 --minutes 30
-  python scripts/loop.py --dry-run          # print the command, run nothing
+  python .claude/scripts/loop.py --iterations 6 --minutes 30
+  python .claude/scripts/loop.py --dry-run          # print the command, run nothing
 
 Each pass starts a NEW headless agent session (Claude Code by default; any agent
-in scripts/agent_cli.py with --agent codex|gemini|...) with the same
+in .claude/scripts/agent_cli.py with --agent codex|gemini|...) with the same
 prompt (LOOP_PROMPT.md): read the state files, take the next unchecked item,
 make its tests pass, commit, update NOTES.md. Memory lives in files, so
 context never rots. The guard and test hooks still apply to every edit.
@@ -27,7 +27,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 PROMPT_FILE = ROOT / ".claude" / "kit" / "LOOP_PROMPT.md"
 LOG = ROOT / "LOOP.md"
 sys.path.insert(0, str(Path(__file__).resolve().parent))

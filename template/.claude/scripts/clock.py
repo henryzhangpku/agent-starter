@@ -1,11 +1,11 @@
 """The build-day clock: check-ins and milestones you can't forget.
 
-  python scripts/clock.py start --demo 16:30 [--every 30]   once, when the prompt is given
-  python scripts/clock.py status                            the timeline, what's done, what's next
-  python scripts/clock.py checkin "works X; next Y; deciding Z"   log a check-in (the /checkin command does this)
-  python scripts/clock.py done <milestone>                  mark a milestone done (plan, tests, slice, stop, readme)
-  python scripts/clock.py report                            actual minutes per phase vs plan (for estimating)
-  python scripts/clock.py hook                              used by the UserPromptSubmit hook
+  python .claude/scripts/clock.py start --demo 16:30 [--every 30]   once, when the prompt is given
+  python .claude/scripts/clock.py status                            the timeline, what's done, what's next
+  python .claude/scripts/clock.py checkin "works X; next Y; deciding Z"   log a check-in (the /checkin command does this)
+  python .claude/scripts/clock.py done <milestone>                  mark a milestone done (plan, tests, slice, stop, readme)
+  python .claude/scripts/clock.py report                            actual minutes per phase vs plan (for estimating)
+  python .claude/scripts/clock.py hook                              used by the UserPromptSubmit hook
 
 Practice runs to completion: start with --budget 120 instead of --demo, mark
 each milestone with `done` as you actually reach it (plus `done green` when
@@ -25,7 +25,7 @@ import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 STATE = ROOT / ".claude" / "clock.json"
 LOG = ROOT / "CHECKINS.md"
 FMT = "%Y-%m-%dT%H:%M"
@@ -108,7 +108,7 @@ def cmd_start(a) -> int:
 def cmd_status(_a) -> int:
     st = load()
     if not st:
-        print("Clock not started: python scripts/clock.py start --demo 16:30")
+        print("Clock not started: python .claude/scripts/clock.py start --demo 16:30")
         return 1
     n = now()
     demo = datetime.strptime(st["demo"], FMT)
@@ -195,7 +195,7 @@ def cmd_hook(_a) -> int:
     for it in overdue:
         late = hm(n - it["at"])
         verb = "run /checkin and say it out loud" if it["kind"] == "checkin" else \
-            f"then: python scripts/clock.py done {it['key']}"
+            f"then: python .claude/scripts/clock.py done {it['key']}"
         print(f"[clock] OVERDUE by {late}: {it['label']}. Tell the human first, before anything else; {verb}.")
     for it in soon:
         print(f"[clock] in {hm(it['at'] - n)}: {it['label']}. Mention it to the human.")

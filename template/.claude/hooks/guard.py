@@ -6,13 +6,13 @@ Reads the hook payload (JSON) from stdin. Paths come from .claude/guard.json:
   acceptance_tests    tests the agent is judged by and must not weaken
   allowed_files       exceptions inside the protected sets
 
-Team mode: if .claude/lane.json exists (written by scripts/lane.sh in a lane
+Team mode: if .claude/lane.json exists (written by .claude/scripts/lane.sh in a lane
 worktree), edits are also limited to the lane's "owns" paths plus
 tests/<task>/, so parallel agents cannot step on each other's files.
 
 Exit codes follow the hook contract: 0 allows; 2 blocks and stderr is shown to
 the agent. Acceptance tests start unlocked so the agent can write them in
-Phase 4; `python scripts/lock_tests.py <path>` locks them once committed. Standard library only, so it runs on any fresh machine.
+Phase 4; `python .claude/scripts/lock_tests.py <path>` locks them once committed. Standard library only, so it runs on any fresh machine.
 """
 from __future__ import annotations
 
