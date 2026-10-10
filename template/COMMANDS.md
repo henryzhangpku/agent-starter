@@ -6,6 +6,7 @@ Detail lives in RUNBOOK.md; you should not need it on the day.
 | step | when | type | then say / do |
 |---|---|---|---|
 | **0 Start** | prompt given | `python scripts/clock.py start --demo 16:30` · paste the prompt into `PROMPT.md` · `claude` | "Let me write that down exactly." |
+| **0b Onboard** | if they hand you code | `/onboard` | Read the 15-line summary: how to run, test, ship. Skip on an empty repo. |
 | **1 Ask** | first 5 min | `/questions` | **Ask its first three questions out loud.** Type the answers back in one line each. |
 | **2 Plan** | min 10-20 | `/make-plan` | Edit it out loud: cut, reorder, add. Then type `save`. |
 | **3 Done-tests** | min 20-30 | `/make-tests` | Cut or add, type `go`. **Say the minute-30 line** it gives you. |
