@@ -7,4 +7,6 @@ and give me the check-in in four lines: what works (ticked steps, tests
 passing), what is next, what I need to decide, and any risk to the demo time.
 Fill the matching row of the check-in table in PLAN.md, then log it:
 `python scripts/clock.py checkin "<works>; <next>; <deciding>; <risk>"`.
-Do not change any code.
+Then overwrite STATUS.md (create it if missing) with: the time, the four
+lines, the test count, and the next check-in time, so anyone on the team can
+read the current state without asking. Do not change any code.
