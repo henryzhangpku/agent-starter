@@ -29,8 +29,22 @@ We are stopping feature work. Do these in order and do not add features:
 5. Update README.md: what it does, how to run it, the result, known gaps.
 6. Tidy DECISIONS.md to the three decisions that matter most, each with the
    alternative we rejected and why.
-7. Write WALKTHROUGH.md: a 5-minute spoken script that follows the demo
-   page top to bottom, in my voice (.claude/kit/VOICE.md), the case that I
+6b. Build **the internal pitch**: `/pitch` on the same server, one HTML file,
+   no libraries, arrow keys and click to advance, readable from the back of a
+   room, same look as the demo page. A short internal pitch, not a fundraise:
+   eight slides, one idea each, real numbers only:
+   1. The problem: their prompt in one line, and who feels it.
+   2. What we heard: the questions I asked and the answers that shaped it.
+   3. The solution: what it does and how, in one picture or flow.
+   4. Live demo: a button that opens the demo page on the guided scenes.
+   5. Results: the headline numbers against the baseline, the weakness beside them.
+   6. How we spent the day: the timeline, MVP time, feedback rounds, the
+      change and its trade-off, thanks by name.
+   7. Gaps and next week: what it gets wrong, the roadmap, what it needs from them.
+   8. How I work: three lines (ask first, ship small with tests, decide with
+      the team), then "Questions?".
+7. Write WALKTHROUGH.md: a 5-minute spoken script that follows the pitch
+   slide by slide (slide 4 switches to the live demo and back), in my voice (.claude/kit/VOICE.md), the case that I
    should be hired after a day in their office:
    - 0:00 Mission: their prompt in one line, and what I asked first and why.
    - 0:45 Solution: what we built, how, and the one decision that mattered most.
