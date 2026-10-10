@@ -49,3 +49,4 @@ newer kit on GitHub: `/update-kit` (refreshes commands and hooks, never your fil
 - Agent heading the wrong way: `Esc`, redirect in one sentence.
 - A locked test looks wrong: tell the person who owns the spec. Never edit around it.
 - Behind the clock: say it at the next check-in, cut from the plan's cut list.
+- It says the session is long: type `/clear`, then `/step`. Nothing is lost; it picks up from PLAN.md and NOTES.md.

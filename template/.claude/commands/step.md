@@ -60,6 +60,11 @@ sub-commands' "wait for go/save" gates are satisfied by my next /step.
 answer to your question), handle it with /change (.claude/commands/change.md)
 before continuing the step flow.
 
+**Long session?** When the `[context]` line appears, finish the current
+step, write NOTES.md, commit, and make the ⏎ line exactly:
+`/clear, then /step = fresh session, picks up from the files`. Never wait on
+the clock for this; never ask anything else at the same time.
+
 **Every time,** before anything else: run `python scripts/clock.py status`.
 If a check-in is due, do /checkin first (it updates STATUS.md) and give me
 the four lines to say out loud, then continue.
