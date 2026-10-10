@@ -11,6 +11,10 @@ my "go":
   report/output), each with typed function signatures and docstrings that
   raise NotImplementedError. Reuse any schema the team handed us; do not
   redefine it.
+- **Data boundary**: all reading of input goes through one `load` module
+  that returns the contract types; today it reads the files in data/, and
+  swapping to their real logs, JSON or a database means writing one new
+  loader, nothing else. No other module opens a file or knows a record id.
 - **Contract**: the data types passed between parts (frozen dataclasses or
   TypedDicts) in `<package>/schema.py`, and the same fields written into
   CONTRACTS.md.

@@ -21,6 +21,9 @@ We are stopping feature work. Do these in order and do not add features:
    only template text). Leave `.claude/` and `scripts/` (the tooling); README
    says in one line that they are the agent-starter tooling. Do not rewrite
    history.
+4b. Write `docs/TESTS.md`: a table of each test file, the behaviours it
+   proves, how many tests, and which risk it guards (the hard rules first);
+   name any part of the product with no test. Keep it to one screen.
 5. Update README.md: what it does, how to run it, the result, known gaps.
 6. Tidy DECISIONS.md to the three decisions that matter most, each with the
    alternative we rejected and why.

@@ -30,8 +30,8 @@ check against that.
    that cannot happen; duplicated logic; vague names; comments that restate
    the code; tests that repeat each other or test implementation details
    rather than behaviour. Over-building is a finding, not a style note.
-8. **Test budget and naming.** Test lines at most equal to product lines;
-   one test per behaviour, parametrize instead of copying; at most 5 HTTP
+8. **Tests earn their place.** More tests are fine when each has a clear
+   purpose: one test per behaviour, parametrize instead of copying, at most 5 HTTP
    tests; no tests that check prose or docs. Test files are named after the
    module they test, never after a process step (review, wave, T<n>,
    hardening, fixes). Flag duplicates of the same boundary across files.

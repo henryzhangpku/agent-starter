@@ -23,7 +23,7 @@ asks. Every reply ends with the same four short lines: 📍 where you are, 🗣 
 | 4 | **Done-tests**: failing acceptance tests, locked | `/step` approves; say the minute-30 line |
 | 5 | **Split**: contracts and parallel tasks | approve the split out loud |
 | 6 | **Build**: waves of parallel agents, or one step at a time | read the summaries, narrate; `/step` commits; demo the first end-to-end slice |
-| 6b | **Improve**: plan done early? measure, fix the weakest number, repeat until 30 min before | nothing; it says each round in one line |
+| 6b | **Show, then improve with the room**: plan done early? demo it, take their feedback, build it | invite the team to look; `/step <their feedback>` |
 | 7 | **Demo prep**: README, decisions, walkthrough | rehearse once out loud |
 | ↻ | **Check-in**, automatically every 30 minutes | say the four lines; STATUS.md updates for anyone who looks |
 
