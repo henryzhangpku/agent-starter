@@ -29,7 +29,8 @@ asks. Every reply ends with `Say:` (your words to the room) and `Next:`.
 ## You can still call any step directly
 
 `/capture` `/questions` `/make-plan` `/scaffold` `/make-tests` `/team-plan` `/dispatch N`
-`/integrate` `/next` `/checkin` `/demo-prep` · handed existing code: `/onboard` first.
+`/integrate` `/next` `/checkin` `/demo-prep` · handed existing code: `/onboard` first ·
+newer kit on GitHub: `/update-kit` (refreshes commands and hooks, never your files).
 
 ## If something goes wrong
 
