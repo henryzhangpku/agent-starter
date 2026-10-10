@@ -69,6 +69,12 @@ We are stopping feature work. Do these in order and do not add features:
      items, each with rough cost, what it would touch, and the trade-off;
      and the line "Want me to start it now? I can show you the impact in two
      minutes" (then `/step <their feature>` runs /change live).
+   - **Why tech abc, not xyz**: every technology choice we made (language,
+     standard-library server vs a framework, rules vs a model, file store vs
+     a database, the test approach), the obvious alternative, and the
+     reason in one line (their constraints, the day's time, fewer moving
+     parts), plus when we would switch ("at real traffic, FastAPI and
+     Postgres; here's where they plug in").
    - Where it breaks, how it scales, swapping in their real data, how we
      know it's right (tests, scorer, the hand-checked sample).
    Each answer: agree with what's fair, give the reason, say what I'd do next.

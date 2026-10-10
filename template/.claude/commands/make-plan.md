@@ -51,4 +51,4 @@ team. Keep it to one screen.
 Stop and wait. I will edit it out loud. When I say "save", write it to
 PLAN.md in its existing structure (a checkbox and a test name per step, the
 cut list, the risks, the check-in table), add the first decisions to
-DECISIONS.md, and commit with the message "plan". $ARGUMENTS
+DECISIONS.md (including each technology choice, the alternative and why), and commit with the message "plan". $ARGUMENTS
