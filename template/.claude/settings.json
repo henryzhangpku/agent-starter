@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/guard.py || python .claude/hooks/guard.py"
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard.py\" || python \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard.py\""
           }
         ]
       },
@@ -15,7 +15,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/guard.py || python .claude/hooks/guard.py"
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard.py\" || python \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard.py\""
           }
         ]
       }
@@ -26,7 +26,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/run_tests.py || python .claude/hooks/run_tests.py",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/run_tests.py\" || python \"$CLAUDE_PROJECT_DIR/.claude/hooks/run_tests.py\"",
             "timeout": 300
           }
         ]
@@ -37,11 +37,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 scripts/clock.py hook || python scripts/clock.py hook"
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/clock.py\" hook || python \"$CLAUDE_PROJECT_DIR/scripts/clock.py\" hook"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/context_budget.py || python .claude/hooks/context_budget.py"
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/context_budget.py\" || python \"$CLAUDE_PROJECT_DIR/.claude/hooks/context_budget.py\""
           }
         ]
       }

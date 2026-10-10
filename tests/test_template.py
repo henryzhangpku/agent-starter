@@ -151,7 +151,17 @@ def test_clock_start_status_hook_and_checkin(project):
 
 def test_settings_wires_clock_hook(project):
     s = json.loads((project / ".claude/settings.json").read_text())
-    assert "clock.py hook" in s["hooks"]["UserPromptSubmit"][0]["hooks"][0]["command"]
+    cmd = s["hooks"]["UserPromptSubmit"][0]["hooks"][0]["command"]
+    assert "clock.py" in cmd and cmd.rstrip().endswith("hook")
+
+
+def test_hook_paths_survive_a_cd(project):
+    # a relative hook path breaks once the agent cds into a subfolder and locks it out
+    s = json.loads((project / ".claude/settings.json").read_text())
+    for groups in s["hooks"].values():
+        for g in groups:
+            for h in g["hooks"]:
+                assert "$CLAUDE_PROJECT_DIR/" in h["command"], h["command"]
 
 
 def test_clock_budget_and_report(project):
@@ -219,6 +229,8 @@ def lock(project):
     "git checkout -- tests/test_acceptance.py",
     "perl -pi -e 's/1/2/' data/x.csv",
     "Set-Content -Path data/x.csv -Value ''",
+    "cd src && echo x > ../data/x.csv",
+    "cd tests && echo pass > test_acceptance.py",
 ])
 def test_guard_blocks_shell_writes_to_protected_paths(project, command):
     lock(project)
@@ -236,10 +248,21 @@ def test_guard_blocks_shell_writes_to_protected_paths(project, command):
     "sed -i 's/a/b/' src/app.py",
     "git status",
     "git commit -m 'step 3'",
+    "cd src && echo hi > app.py",
 ])
 def test_guard_allows_shell_reads_and_unprotected_writes(project, command):
     lock(project)
     assert guard_bash(project, command).returncode == 0, command
+
+
+def test_guard_resolves_writes_from_the_shell_cwd(project):
+    # the agent's shell sits in a subfolder: ../data is still protected
+    (project / "src").mkdir(exist_ok=True)
+    payload = json.dumps({"tool_name": "Bash", "cwd": str(project / "src"),
+                          "tool_input": {"command": "echo x > ../data/x.csv"}})
+    r = subprocess.run([sys.executable, str(project / ".claude/hooks/guard.py")],
+                       input=payload, capture_output=True, text=True)
+    assert r.returncode == 2 and "BLOCKED" in r.stderr
 
 
 def test_guard_shell_respects_lane_ownership(project):
@@ -324,7 +347,7 @@ def test_settings_wire_the_context_budget(project):
     s = json.loads((project / ".claude/settings.json").read_text())
     cmds = [h["command"] for m in s["hooks"]["UserPromptSubmit"] for h in m["hooks"]]
     assert any("context_budget.py" in c for c in cmds)
-    assert any("clock.py hook" in c for c in cmds)
+    assert any("clock.py" in c and c.rstrip().endswith("hook") for c in cmds)
 
 
 def test_agent_cli_builtins_and_override(project):

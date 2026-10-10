@@ -120,10 +120,21 @@ def _words(segment: str) -> list[str]:
         return segment.split()
 
 
-def write_targets(command: str) -> list[str]:
-    """Paths a shell command explicitly writes to (best effort)."""
-    targets = [m.group(1) for m in _REDIRECT.finditer(command) if m.group(1) not in ("/dev/null", "nul", "NUL")]
+def write_targets(command: str, cwd: Path | None = None) -> list[str]:
+    """Paths a shell command explicitly writes to (best effort), made absolute against the
+    directory each segment runs in, so `cd pkg && echo x > ../data/f` is caught."""
+    here = cwd or ROOT
+    targets: list[str] = []
+
+    def add(path: str) -> None:
+        if path in ("/dev/null", "nul", "NUL"):
+            return
+        p = Path(path)
+        targets.append(str(p if p.is_absolute() else here / p))
+
     for segment in re.split(r"[;&|\n]+", command):
+        for m in _REDIRECT.finditer(segment):
+            add(m.group(1))
         words = _words(segment.strip())
         while words and ("=" in words[0] and not words[0].startswith("-")):
             words = words[1:]  # VAR=value prefixes
@@ -131,12 +142,17 @@ def write_targets(command: str) -> list[str]:
             continue
         verb = Path(words[0]).name
         args = [w for w in words[1:] if not w.startswith("-")]
-        if verb in _DEST_LAST and args:
-            targets.append(args[-1])
+        if verb in ("cd", "pushd", "Set-Location", "sl"):
+            dest = Path(args[0]) if args else ROOT
+            here = (dest if dest.is_absolute() else here / dest).resolve()
+        elif verb in _DEST_LAST and args:
+            add(args[-1])
         elif verb in _WRITE_VERBS:
-            targets.extend(args)
+            for a in args:
+                add(a)
         elif verb in _INPLACE and any(w.startswith("-i") or (w.startswith("-") and "i" in w[1:] and verb != "sed") for w in words[1:]):
-            targets.extend(args[1:] if verb == "sed" else args)
+            for a in (args[1:] if verb == "sed" else args):
+                add(a)
     return targets
 
 
@@ -147,8 +163,8 @@ def _mentions(command: str, cfg: dict) -> list[str]:
     return [n for n in names if n and n not in cfg["allowed_files"] and n.rstrip("/") in text]
 
 
-def bash_verdict(command: str, cfg: dict, lane: dict | None = None) -> str | None:
-    for target in write_targets(command):
+def bash_verdict(command: str, cfg: dict, lane: dict | None = None, cwd: Path | None = None) -> str | None:
+    for target in write_targets(command, cwd):
         reason = verdict(target, cfg, lane)
         if reason:
             return f"this shell command writes {reason}"
@@ -169,7 +185,8 @@ def main() -> int:
     tool_input = payload.get("tool_input") or {}
     command = tool_input.get("command")
     if isinstance(command, str) and command.strip():
-        reason = bash_verdict(command, load_config(), load_lane())
+        cwd = Path(payload["cwd"]) if payload.get("cwd") else None
+        reason = bash_verdict(command, load_config(), load_lane(), cwd)
     else:
         path = tool_input.get("file_path") or tool_input.get("notebook_path")
         if not path:
