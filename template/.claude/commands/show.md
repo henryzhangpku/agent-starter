@@ -3,8 +3,8 @@ description: Show me what we have built so far - run it, three real examples, th
 ---
 
 Show me the product as it stands, in one screen, without changing any file:
-1. If the demo page exists, start it and give me the local URL to open
-   first. Otherwise run the end-to-end command (from CLAUDE.md or README) on the real data
+1. If the server exists, start it, give me the local URL of the demo page,
+   and one `curl` call to the API that shows the same answer. Otherwise run the end-to-end command (from CLAUDE.md or README) on the real data
    and show the summary it prints.
 2. Three real examples from its output that tell the story: one it gets
    right, one it refuses or flags on purpose, one it still gets wrong or is

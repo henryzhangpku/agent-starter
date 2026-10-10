@@ -7,12 +7,18 @@ already here. If there is no data, step 1 of the plan is a small synthetic
 dataset with the hard cases the answers mention, plus a held-out slice. Propose a plan for this build, without writing any code:
 the thinnest end-to-end slice first, then improvements in priority order.
 For each step: what it produces and the test that proves it. Always include,
-right after the thinnest slice, a **demo surface**: one local web page the
-room can watch and use (standard-library `http.server` serving one HTML file
-with inline CSS and JS, no build step, no new dependency, `python -m <package>.demo`
-opens it). It shows the product doing its job on real inputs: pick or type
-an input, see the output and the reason, plus the headline numbers. A
-script that prints JSON is not a demo. Then the cut
+right after the thinnest slice, the **integration surface and the demo**,
+in three layers so the team could plug it into their system:
+(1) the core stays a plain library (pure functions, no I/O inside the logic);
+(2) a thin **JSON HTTP API** over it (standard library `http.server` unless
+a framework is allowed), with the endpoints the team's system would call,
+request and response shapes written in CONTRACTS.md, errors as JSON with a
+status code, and an `/health` endpoint;
+(3) one **demo page** (one HTML file, inline CSS and JS, no build step)
+served by the same server that calls **only the API**, never the internals,
+so what the room sees is exactly what an integrating system would get.
+`python -m <package>.serve` starts both. A script that prints JSON is not a
+demo. Then the cut
 list (what we drop if short on time), the risks, and the three things the
 demo will show. Size it to the day: the fewest modules and the least code that meet the
 answers; a senior engineer should find nothing to delete. Keep it to one screen.
