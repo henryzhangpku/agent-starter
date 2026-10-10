@@ -29,11 +29,21 @@ We are stopping feature work. Do these in order and do not add features:
 5. Update README.md: what it does, how to run it, the result, known gaps.
 6. Tidy DECISIONS.md to the three decisions that matter most, each with the
    alternative we rejected and why.
-7. Write WALKTHROUGH.md: a 5-minute spoken script - the problem in one line,
-   the live demo command and what to point at, `git log --oneline` as the
-   story of the day, the three decisions, what it gets wrong, what I would do
-   next with a week. Add, for each of the three core functions, a
-   two-sentence plain-English explanation I can say if asked about the code.
+7. Write WALKTHROUGH.md: a 5-minute spoken script that follows the demo
+   page top to bottom, in my voice (.claude/kit/VOICE.md), the case that I
+   should be hired after a day in their office:
+   - 0:00 Mission: their prompt in one line, and what I asked first and why.
+   - 0:45 Solution: what we built, how, and the one decision that mattered most.
+   - 1:30 How we spent the day: the timeline; MVP time, the feedback rounds
+     and whose they were, the change we absorbed and its trade-off; thank
+     people by name.
+   - 2:30 The product, live: the three scenes (everyday, refused on purpose,
+     hard case), then invite someone to try their own input.
+   - 4:00 Honest gaps and the roadmap: what it gets wrong, what a week adds.
+   - 4:40 Close: one sentence on how I like to work with a team, then stop and
+     take questions.
+   Add, for each of the three core functions, a two-sentence plain-English
+   explanation I can say if asked about the code.
 Finally: run the suite three times (no flakes), check every number in
 README and WALKTHROUGH against the measured output (same definitions as the
 problem statement; the main weakness in the same sentence as the headline),
