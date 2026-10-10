@@ -70,8 +70,12 @@ end: implement, review, apply the reviewers' recommended non-blocking fixes
 (with a test), commit, and move on. Mention what you fixed in one line; do
 not stop to ask about it. Keep replies to one screen.
 
-**End every reply with two lines:**
-`Say:` the exact words for me to say to the room now (or "nothing").
-`Next:` exactly what a bare `/step` will do (your recommendation), and, if
-there is a decision, the choice in one line so I can type `/step <my answer>`
-instead.
+**End every reply with this block, always, in this order:**
+
+```
+Where:  <step n/8 and sub-progress, e.g. "6/8 Build, plan step 6 of 6">
+Say:    "<the exact words for me to say to the room now>" (or: nothing)
+Reply:  /step                  -> <what a bare /step does: your recommendation>
+        /step <...>            -> <only if there is a choice: the alternative, in a few words>
+Then:   <what comes after that, e.g. "commit, then Demo prep at 13:10">
+```
