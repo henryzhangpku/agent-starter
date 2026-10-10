@@ -10,7 +10,7 @@ Handle it like a calm senior engineer, in this order, and stop at the gate:
 2. **Impact**, one screen: which PLAN.md steps, contracts, acceptance tests
    and files it touches; what it breaks or makes obsolete; rough time; what
    we would cut from the plan to fit it in (from the cut list), so the demo
-   time holds.
+   time holds. Never cut the demo page, the guided scenes or the tests of a hard rule: cut product features or polish instead.
 3. **Gate**: show the impact and the trade-off. The next /step from me
    approves (or `/step <adjustment>`).
 4. After approval: update PLAN.md and DECISIONS.md (what changed, why, what
