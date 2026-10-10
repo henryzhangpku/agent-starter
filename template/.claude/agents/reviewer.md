@@ -53,6 +53,22 @@ check against that.
    is a finding (it will not generalise).
 13. **Flakes.** Run the suite three times; any test that fails once is a
    blocker.
+14. **Whose labels.** Only answer keys the team provided may produce a
+   reported number. Anything the agent labelled itself is "self-labels" and
+   never appears as a result in README or WALKTHROUGH.
+15. **Claims need tests.** Every safety sentence in README (fail closed,
+   never, always, refuses) has a test that exercises it through the public
+   entry point (the API, not an internal function). No test, no claim.
+16. **Product code reads like a product.** No process words, task ids,
+   times or record ids inside the package: "Step 3", "wave", "T6", "12:59",
+   specific record ids from the data. Error responses are fixed messages,
+   never exception text (it can echo user data).
+17. **Serving is not training.** The server loads a fitted artifact made
+   offline and refuses to start without it; it never fits from labels at
+   startup or silently falls back.
+18. **Built once, not per request.** State is built at startup or on write,
+   not replayed on every read; no global lock around a full recompute; one
+   source of truth.
 
 ## What you may change
 
