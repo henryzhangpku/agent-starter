@@ -26,6 +26,11 @@ asks. Every reply ends with the same four short lines: 📍 where you are, 🗣 
 | 7 | **Demo prep**: README, decisions, walkthrough | rehearse once out loud |
 | ↻ | **Check-in**, automatically every 30 minutes | say the four lines; STATUS.md updates for anyone who looks |
 
+## See what's built, any time
+
+`/show` runs the product and shows three real examples and the parts in plain
+English. It changes nothing; the next `/step` carries on.
+
 ## You can still call any step directly
 
 `/capture` `/questions` `/make-plan` `/scaffold` `/make-tests` `/team-plan` `/dispatch N`
