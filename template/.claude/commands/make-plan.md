@@ -19,7 +19,15 @@ status code, and an `/health` endpoint;
 served by the same server that calls **only the API**, never the internals,
 so what the room sees is exactly what an integrating system would get.
 `python -m <package>.serve` starts both. A script that prints JSON is not a
-demo. Then the cut
+demo. The page must reach the **MVP demo bar** (the first ITERATE round):
+(a) opens on the story: the problem in one line and the headline numbers
+against the baseline, with the main weakness beside them; (b) three guided
+scenes on real records, as buttons: the everyday case, the case it refuses
+or flags on purpose, the hard case; (c) try your own input; (d) every
+output shows why (reason and evidence), never raw JSON (a raw toggle is
+fine); (e) "where it would hurt us": the known gaps; (f) looks like a
+product: a small token palette, readable type scale, works at laptop and
+phone width, loading and error states. Then the cut
 list (what we drop if short on time), the risks, and the three things the
 demo will show. Before any threshold or rule is tuned, split the data into a working set
 and a held-out set (or say plainly there is none and never claim one). The

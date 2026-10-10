@@ -5,7 +5,8 @@ description: Step 6 - stop building; run everything, tidy README and DECISIONS, 
 We are stopping feature work. Do these in order and do not add features:
 1. Run the full suite and the end-to-end command; show the result. Start the
    demo page and check it loads and works on three real inputs; the live
-   demo is the page, not the terminal.
+   demo is the page, not the terminal. Check it against the MVP demo bar in
+   make-plan.md and fix any gap before writing the walkthrough.
 2. `python scripts/clock.py done stop`.
 3. **Senior-engineer pass on the code** (the team will open the repo):
    use the reviewer on the whole product package, not a diff, for

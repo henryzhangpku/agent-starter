@@ -47,7 +47,9 @@ sub-commands' "wait for go/save" gates are satisfied by my next /step.
    and tell me to demo it to the room now.
 6b. **Iterate: MVP, feedback, next round.** Every PLAN.md step is ticked and
    more than 30 minutes remain. Finishing early is good: it buys time for
-   people. First do /show and give me the line to invite the team to look
+   people. Round 1 is always the demo: bring the page to the MVP demo bar in
+   make-plan.md (story, three guided scenes, try your own, why, gaps,
+   product look) before anyone sees it. Then do /show and give me the line to invite the team to look
    and react. **Gate:** I bring back what they said (`/step <their
    feedback>`), or a bare `/step` to improve on our own. Then turn the
    feedback, or else the weakest measured number, into the next PLAN.md
