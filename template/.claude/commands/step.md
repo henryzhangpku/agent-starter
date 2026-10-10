@@ -45,6 +45,13 @@ sub-commands' "wait for go/save" gates are satisfied by my next /step.
    changing Z because..."); commit only after my "go". When every input gets
    an output end to end for the first time: `python scripts/clock.py done slice`
    and tell me to demo it to the room now.
+6b. **Improve.** Every PLAN.md step is ticked but more than 30 minutes remain
+   before the demo: do not start demo prep early. Run the product, measure it
+   (the scorer, our own answer key, the "where it would hurt us" list), name
+   the weakest number or the most costly failure, add it to PLAN.md as the
+   next step with a test, and build it through the normal loop. Repeat until
+   30 minutes before the demo. Say each round in one line: what was weakest,
+   what we changed, the number before and after.
 7. **Demo prep.** 30 minutes or less before the demo (check
    `python scripts/clock.py status`): stop feature work and do /demo-prep.
    **Gate:** tell me to rehearse WALKTHROUGH.md out loud once.
