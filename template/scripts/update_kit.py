@@ -3,7 +3,7 @@
     python scripts/update_kit.py
 
 Overwrites only the kit's own tooling: .claude/commands, .claude/agents, .claude/hooks,
-scripts/, COMMANDS.md and RUNBOOK.md. Never touches your project files (PROMPT.md, PLAN.md,
+.claude/kit, scripts/ and COMMANDS.md. Never touches your project files (PROMPT.md, PLAN.md,
 CLAUDE.md, TEAM.md, DECISIONS.md, NOTES.md, TASKS.md, CONTRACTS.md, .claude/guard.json,
 .claude/settings.json, tests/, your code or data).
 """
@@ -16,7 +16,7 @@ from pathlib import Path
 
 URL = "https://github.com/henryzhangpku/agent-starter/archive/refs/heads/main.tar.gz"
 PREFIX = "agent-starter-main/template/"
-TOOLING = (".claude/commands/", ".claude/agents/", ".claude/hooks/", "scripts/", "COMMANDS.md", "RUNBOOK.md")
+TOOLING = (".claude/commands/", ".claude/agents/", ".claude/hooks/", ".claude/kit/", "scripts/", "COMMANDS.md")
 
 
 def main() -> None:

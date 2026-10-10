@@ -14,12 +14,13 @@ We are stopping feature work. Do these in order and do not add features:
    implementation-detail tests, clear names. Behaviour must not change: the
    acceptance tests stay green. Report lines and tests before and after.
 4. **Clean the repo** so it reads like an engineer's project, not a kit.
-   Delete from the root: RUNBOOK.md, COMMANDS.md, AGENTS.md, CARD.md,
-   LANE.md, FANOUT_PROMPT.md, LOOP_PROMPT.md, CHECKINS.md, and any of
-   TEAM.md, TASKS.md, CONTRACTS.md, NOTES.md that still hold template text.
-   Keep README.md, PROMPT.md, PLAN.md, DECISIONS.md, STATUS.md, WALKTHROUGH.md
-   and the filled CONTRACTS.md. Leave .claude/ and scripts/ alone (the
-   tooling). Do not rewrite history.
+   The root keeps only README.md, WALKTHROUGH.md, DECISIONS.md and CLAUDE.md
+   (plus code, tests, data). `git mv` PROMPT.md, PLAN.md and CONTRACTS.md
+   into `docs/`, and TEAM.md, TASKS.md, NOTES.md, STATUS.md, CHECKINS.md,
+   COMMANDS.md and AGENTS.md into `docs/process/` (delete any that still hold
+   only template text). Leave `.claude/` and `scripts/` (the tooling); README
+   says in one line that they are the agent-starter tooling. Do not rewrite
+   history.
 5. Update README.md: what it does, how to run it, the result, known gaps.
 6. Tidy DECISIONS.md to the three decisions that matter most, each with the
    alternative we rejected and why.
@@ -28,4 +29,8 @@ We are stopping feature work. Do these in order and do not add features:
    story of the day, the three decisions, what it gets wrong, what I would do
    next with a week. Add, for each of the three core functions, a
    two-sentence plain-English explanation I can say if asked about the code.
-Commit with "demo prep". $ARGUMENTS
+Finally: run the suite three times (no flakes), check every number in
+README and WALKTHROUGH against the measured output (same definitions as the
+problem statement; the main weakness in the same sentence as the headline),
+commit with "demo prep", and confirm `git status --porcelain` is empty.
+$ARGUMENTS

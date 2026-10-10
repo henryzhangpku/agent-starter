@@ -50,8 +50,8 @@ One page: [`template/COMMANDS.md`](template/COMMANDS.md).
 
 | file | job |
 |---|---|
-| `CARD.md` | the whole day on one page: what to do and what to say at each moment; keep it open |
-| `RUNBOOK.md` | the build day step by step, with modes for a new problem, an existing codebase, team mode and shipping; time boxes, copy-paste prompts, the commit that closes each phase |
+| `.claude/kit/CARD.md` | the whole day on one page: what to do and what to say at each moment; keep it open |
+| `.claude/kit/RUNBOOK.md` | the build day step by step, with modes for a new problem, an existing codebase, team mode and shipping; time boxes, copy-paste prompts, the commit that closes each phase |
 | `scripts/clock.py` + a UserPromptSubmit hook | **the build-day clock:** `clock.py start --demo 16:30` once; every prompt then carries time-to-demo, and the agent warns you when a check-in or milestone (plan, tests, slice, stop, README, demo) is due or overdue. Check-ins are logged to `CHECKINS.md`. Says nothing until started |
 | `/checkin`, `/questions` | status in four lines, logged with the clock; who to ask what, from the prompt |
 
@@ -64,7 +64,7 @@ One page: [`template/COMMANDS.md`](template/COMMANDS.md).
 | `.claude/agents/test-engineer.md` | tests from the spec **without reading the implementation**, run in parallel with the implementer |
 | `.claude/agents/safety-reviewer.md` | failure paths, secrets, money and identity decisions, data handling |
 | `/team-plan`, `/dispatch`, `/integrate` | split; run a wave of subagents in parallel; full test run, ownership check, reviews, one commit per task |
-| `scripts/fanout.py`, `FANOUT_PROMPT.md` | **best-of-N:** one task to several agents (same or different models) in separate worktrees, in parallel; each attempt's tests, diff size and out-of-scope edits ranked in `COMPARE.md`; you read the top diffs and merge one; `--cleanup` removes them |
+| `scripts/fanout.py`, `.claude/kit/FANOUT_PROMPT.md` | **best-of-N:** one task to several agents (same or different models) in separate worktrees, in parallel; each attempt's tests, diff size and out-of-scope edits ranked in `COMPARE.md`; you read the top diffs and merge one; `--cleanup` removes them |
 | `AGENTS.md`, `scripts/agent_cli.py` | **agent-agnostic:** Codex, Gemini, Cursor and others read AGENTS.md (it points to CLAUDE.md); `loop.py` and `fanout.py` take `--agent claude|codex|gemini` or any CLI you define in `.claude/agent_cli.json`. Hooks only bind Claude Code; for other agents the scripts' test runs and diffs are the check |
 | `scripts/lane.sh`, `lane.ps1` | a separate worktree and branch per task for long tasks, with the guard enforcing the task's paths |
 | `TASKS.md`, `CONTRACTS.md` | the task board; every shared interface, written before parallel work |
@@ -77,11 +77,11 @@ One page: [`template/COMMANDS.md`](template/COMMANDS.md).
 | `/publish` | open-source a finished build: secret and name checks, README with measured results, licence, optional demo page with link preview, a post draft; never pushes or posts |
 | `/ship` | the team's own checks, rollout behind a flag, rollback, observability, a PR description; never merges or deploys itself |
 | `/questions` | from the prompt: who to reach out to, up to three specific questions each, when to ask, what to offer back; the first three questions to say out loud |
-| `scripts/loop.py`, `LOOP_PROMPT.md` | a bounded Ralph loop: fresh headless sessions take one plan item per pass, keep tests green, commit, log to LOOP.md; stops when done, stalled twice, or at the time/pass limit; edits auto-accepted, shell limited, permissions never skipped |
+| `scripts/loop.py`, `.claude/kit/LOOP_PROMPT.md` | a bounded Ralph loop: fresh headless sessions take one plan item per pass, keep tests green, commit, log to LOOP.md; stops when done, stalled twice, or at the time/pass limit; edits auto-accepted, shell limited, permissions never skipped |
 | `TEAM.md` | who owns what, questions asked and answers, handoffs to people, credit |
-| `LANE.md` | a brief for a second agent or a person owning a slice |
+| `.claude/kit/LANE.md` | a brief for a second agent or a person owning a slice |
 
-## The first thirty minutes with it (the full day is in RUNBOOK.md)
+## The first thirty minutes with it (the full day is in .claude/kit/RUNBOOK.md)
 
 1. **0-5:** write the request into `PROMPT.md`; ask the people, not the tool,
    who uses the output, what data exists, what done means, what costs most.

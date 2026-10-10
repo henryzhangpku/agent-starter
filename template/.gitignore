@@ -6,3 +6,4 @@ __pycache__/
 .claude/test_timing.json
 .fanout/
 .omc/
+CHECKINS.md

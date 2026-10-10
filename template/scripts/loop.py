@@ -28,7 +28,7 @@ from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PROMPT_FILE = ROOT / "LOOP_PROMPT.md"
+PROMPT_FILE = ROOT / ".claude" / "kit" / "LOOP_PROMPT.md"
 LOG = ROOT / "LOOP.md"
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import agent_cli  # noqa: E402

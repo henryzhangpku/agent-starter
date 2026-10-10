@@ -11,7 +11,8 @@ right after the thinnest slice, the **integration surface and the demo**,
 in three layers so the team could plug it into their system:
 (1) the core stays a plain library (pure functions, no I/O inside the logic);
 (2) a thin **JSON HTTP API** over it (standard library `http.server` unless
-a framework is allowed), with the endpoints the team's system would call,
+a framework is allowed; `--port` flag, request-scoped state, read the body
+before any error response), with the endpoints the team's system would call,
 request and response shapes written in CONTRACTS.md, errors as JSON with a
 status code, and an `/health` endpoint;
 (3) one **demo page** (one HTML file, inline CSS and JS, no build step)
@@ -20,7 +21,10 @@ so what the room sees is exactly what an integrating system would get.
 `python -m <package>.serve` starts both. A script that prints JSON is not a
 demo. Then the cut
 list (what we drop if short on time), the risks, and the three things the
-demo will show. Size it to the day: the fewest modules and the least code that meet the
+demo will show. Before any threshold or rule is tuned, split the data into a working set
+and a held-out set (or say plainly there is none and never claim one). The
+output files must follow the exact shapes the team gave (PROMPT.md answers);
+if a shape was not given, ask. Size it to the day: the fewest modules and the least code that meet the
 answers; a senior engineer should find nothing to delete. Keep it to one screen.
 
 Stop and wait. I will edit it out loud. When I say "save", write it to

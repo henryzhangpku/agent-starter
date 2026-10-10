@@ -41,7 +41,7 @@ sys.path.insert(0, str(HERE))
 import agent_cli  # noqa: E402
 
 ROOT = HERE.parent
-PROMPT_FILE = ROOT / "FANOUT_PROMPT.md"
+PROMPT_FILE = ROOT / ".claude" / "kit" / "FANOUT_PROMPT.md"
 COMPARE = ROOT / "COMPARE.md"
 
 

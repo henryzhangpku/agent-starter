@@ -30,6 +30,29 @@ check against that.
    that cannot happen; duplicated logic; vague names; comments that restate
    the code; tests that repeat each other or test implementation details
    rather than behaviour. Over-building is a finding, not a style note.
+8. **Test budget and naming.** Test lines at most equal to product lines;
+   one test per behaviour, parametrize instead of copying; at most 5 HTTP
+   tests; no tests that check prose or docs. Test files are named after the
+   module they test, never after a process step (review, wave, T<n>,
+   hardening, fixes). Flag duplicates of the same boundary across files.
+9. **One fail-closed boundary per entry point.** No `except Exception` that
+   swallows: it re-raises, or sits at the single top-level boundary, logs,
+   and records an internal-error reason distinct from any real rule. The
+   code's own invariants belong in tests, not runtime checks of itself.
+10. **Scope.** Every endpoint, option and module traces to PROMPT.md or
+   PLAN.md. Anything else (sessions, extra HTTP verbs, unused helpers) is
+   cut, or moved to README's "with a week" list.
+11. **Server basics.** `--port` flag; no state shared across requests unless
+   the problem requires it (and then explicit); the request body is read
+   before any error response.
+12. **Honest numbers.** Every number in README or WALKTHROUGH matches the
+   measured output, uses the same definition as the problem statement or
+   scorer, and the main known weakness sits in the same sentence as the
+   headline. No "held-out" claim unless the split was made before tuning.
+   Logic keyed to specific record ids or hand-picked phrases from the data
+   is a finding (it will not generalise).
+13. **Flakes.** Run the suite three times; any test that fails once is a
+   blocker.
 
 ## What you may change
 

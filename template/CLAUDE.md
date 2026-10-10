@@ -37,7 +37,7 @@ parts that can be enforced mechanically; `.claude/guard.json` says which paths.
 
 ## Project facts (`/scaffold` fills these in; correct them if wrong)
 
-- The human follows `RUNBOOK.md`. Problem: `PROMPT.md`. Plan: `PLAN.md`. State between sessions: `NOTES.md`.
+- The human follows `COMMANDS.md` (detail: `.claude/kit/RUNBOOK.md`). Problem: `PROMPT.md`. Plan: `PLAN.md`. State between sessions: `NOTES.md`.
   Decisions: `DECISIONS.md`.
 - Data: `<path and format>`; inputs are read-only.
 - The only module that calls a model: `<path>`.
