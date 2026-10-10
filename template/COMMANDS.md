@@ -12,6 +12,11 @@ asks. Every reply ends with the same four short lines: 📍 where you are, 🗣 
     curl -fsSL https://raw.githubusercontent.com/henryzhangpku/agent-starter/main/bootstrap.sh | bash
     git init -q && git add -A && git commit -qm "start" && claude
 
+## The phase is on the first line of every reply
+
+`SETUP` talk a lot · `BUILD` heads down until v1 passes · `IMPROVE` v1 is done:
+time for people, demos, feedback, changes · `DEMO PREP` last 30 minutes, no new work.
+
 ## What /step walks you through
 
 | # | step | the gate: you |

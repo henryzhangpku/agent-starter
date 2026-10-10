@@ -71,15 +71,23 @@ If a check-in is due, do /checkin first (it updates STATUS.md) and give me
 the four lines to say out loud, then continue.
 
 **Start every reply with the map**, two short lines in a code block, so I
-always know where we are and how far the finish is:
+always know the phase, where we are and how far the finish is:
 
 ```
-●●●●●●◐○  6/8 Build · plan step 6 of 6 (spot-check)
-11:22 · demo 12:20 (58m) · 215 tests, 9/9 acceptance · check-in 11:42
+IMPROVE · v1 done 11:42 · round 2: their feedback on the demo page
+●●●●●●●◐  7/8 · 13:05 · demo 16:30 (3h25m) · 215 tests, 9/9 acceptance · check-in 13:12
 ```
-Eight dots for Capture, Ask, Plan, Skeleton, Tests, Split, Build, Demo:
-● done, ◐ current, ○ not started. Line 1 names the current step and its
-sub-progress; line 2 is time, time left, test counts, next check-in.
+Line 1 starts with the **phase**, in capitals, so I can use the time well:
+- `SETUP` (capture, ask, plan, skeleton, done-tests, split): talk a lot.
+- `BUILD` (until the first full version, v1, passes the acceptance tests):
+  heads-down time; changes are costly, so weigh them.
+- `IMPROVE` (v1 done; say when): the time for people, demos, feedback and
+  changes; each round is one small, tested step.
+- `DEMO PREP` (last 30 minutes): no new work.
+Then the current task. Line 2: eight dots for Capture, Ask, Plan, Skeleton,
+Tests, Split, Build, Demo (● done, ◐ current, ○ not started), time, time
+left, test counts, next check-in. When a change request arrives, say which
+phase it lands in and what that means for the clock.
 
 **Fewer stops.** Stop only at the gates above, for a decision only I can
 make, or for a blocker. Inside Build, a bare /step runs a whole wave end to
