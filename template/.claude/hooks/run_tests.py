@@ -85,7 +85,29 @@ def edited_path(payload: dict) -> Path | None:
     return path if path.is_absolute() else ROOT / path
 
 
+def other_command() -> str | None:
+    """The project's own test command when it is not plain pytest: guard.json "test_command",
+    else detected from the repo (Node, Go, Rust, Java). None means pytest."""
+    try:
+        cmd = json.loads((ROOT / ".claude" / "guard.json").read_text(encoding="utf-8")).get("test_command")
+    except (OSError, ValueError):
+        cmd = None
+    if cmd:
+        return cmd
+    for marker, detected in (("package.json", "npm test --silent"), ("go.mod", "go test ./..."),
+                             ("Cargo.toml", "cargo test -q"), ("pom.xml", "mvn -q test"),
+                             ("build.gradle", "gradle test -q")):
+        if (ROOT / marker).exists() and not any(ROOT.glob("tests/test_*.py")):
+            return detected
+    return None
+
+
 def run(args: list[str]) -> tuple[subprocess.CompletedProcess, float]:
+    cmd = other_command()
+    if cmd:
+        t0 = time.monotonic()
+        proc = subprocess.run(cmd, shell=True, cwd=ROOT, capture_output=True, text=True, timeout=300)
+        return proc, time.monotonic() - t0
     t0 = time.monotonic()
     proc = subprocess.run(
         [python(), "-m", "pytest", "-q", "-x", "--no-header", "-p", "no:cacheprovider", *args],
@@ -108,7 +130,7 @@ def main() -> int:
     timed = full_suite_seconds()
     scoped = setting == "changed" or (setting == "auto" and timed is not None and timed > FAST_SECONDS)
     args: list[str] = []
-    if scoped and edited is not None:
+    if scoped and edited is not None and other_command() is None:
         targets = tests_for(edited)
         if not targets:
             rel = edited.relative_to(ROOT).as_posix() if edited.is_relative_to(ROOT) else edited.name

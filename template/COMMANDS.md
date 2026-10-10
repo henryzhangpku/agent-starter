@@ -14,8 +14,12 @@ asks. Every reply ends with the same four short lines: 📍 where you are, 🗣 
 
 ## The phase is on the first line of every reply
 
-`SETUP` talk a lot · `BUILD` heads down until v1 passes · `IMPROVE` v1 is done:
-time for people, demos, feedback, changes · `DEMO PREP` last 30 minutes, no new work.
+`SETUP` talk a lot · `BUILD MVP` heads down until the MVP passes · `ITERATE` MVP is
+out: show the team, take feedback, ship small rounds · `DEMO PREP` last 30 minutes, no new work.
+
+The 🗣 lines follow `.claude/kit/VOICE.md` (edit it once to sound like you).
+Limited tokens? Set `"budget": "lean"` in `.claude/guard.json`: no parallel agents.
+Not Python? Set `"test_command"` there (`npm test`, `go test ./...`); Node, Go, Rust and Java are detected.
 
 ## What /step walks you through
 
@@ -28,7 +32,7 @@ time for people, demos, feedback, changes · `DEMO PREP` last 30 minutes, no new
 | 4 | **Done-tests**: failing acceptance tests, locked | `/step` approves; say the minute-30 line |
 | 5 | **Split**: contracts and parallel tasks | approve the split out loud |
 | 6 | **Build**: waves of parallel agents, or one step at a time | read the summaries, narrate; `/step` commits; demo the first end-to-end slice |
-| 6b | **Show, then improve with the room**: plan done early? demo it, take their feedback, build it | invite the team to look; `/step <their feedback>` |
+| 6b | **Iterate: MVP, feedback, next round**: plan done early? demo it, take their feedback, build it | invite the team to look; `/step <their feedback>` |
 | 7 | **Demo prep**: README, decisions, walkthrough | rehearse once out loud |
 | ↻ | **Check-in**, automatically every 30 minutes | say the four lines; STATUS.md updates for anyone who looks |
 

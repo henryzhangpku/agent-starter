@@ -6,7 +6,11 @@ Read PROMPT.md, PLAN.md, TEAM.md and whatever the team handed us (data/,
 any package already here). Propose the skeleton in one screen and wait for
 my "go":
 
-- **Package**: one Python package named for the product, with one module per
+- **Language**: the one the team uses (from PROMPT.md answers or the code
+  they handed us; if unknown, ask; default Python with pytest). If it is not
+  Python, set `"test_command"` in `.claude/guard.json` (e.g. `npm test`,
+  `go test ./...`) so the test hook runs their tests.
+- **Package**: one package named for the product, with one module per
   plan part (load, the core logic, the one model module if a model is used,
   report/output), each with typed function signatures and docstrings that
   raise NotImplementedError. Reuse any schema the team handed us; do not

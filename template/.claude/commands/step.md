@@ -45,7 +45,7 @@ sub-commands' "wait for go/save" gates are satisfied by my next /step.
    changing Z because..."); commit only after my "go". When every input gets
    an output end to end for the first time: `python scripts/clock.py done slice`
    and tell me to demo it to the room now.
-6b. **Show, then improve with the room.** Every PLAN.md step is ticked and
+6b. **Iterate: MVP, feedback, next round.** Every PLAN.md step is ticked and
    more than 30 minutes remain. Finishing early is good: it buys time for
    people. First do /show and give me the line to invite the team to look
    and react. **Gate:** I bring back what they said (`/step <their
@@ -74,20 +74,27 @@ the four lines to say out loud, then continue.
 always know the phase, where we are and how far the finish is:
 
 ```
-IMPROVE · v1 done 11:42 · round 2: their feedback on the demo page
+ITERATE · MVP done 11:42 · round 2: their feedback on the demo page
 ●●●●●●●◐  7/8 · 13:05 · demo 16:30 (3h25m) · 215 tests, 9/9 acceptance · check-in 13:12
 ```
 Line 1 starts with the **phase**, in capitals, so I can use the time well:
 - `SETUP` (capture, ask, plan, skeleton, done-tests, split): talk a lot.
-- `BUILD` (until the first full version, v1, passes the acceptance tests):
-  heads-down time; changes are costly, so weigh them.
-- `IMPROVE` (v1 done; say when): the time for people, demos, feedback and
-  changes; each round is one small, tested step.
+- `BUILD MVP` (until the first full version, the MVP, passes the acceptance
+  tests): heads-down time; changes are costly, so weigh them.
+- `ITERATE` (MVP done; say when): like a startup after launch: show it to
+  the team (the market), take their feedback, ship one small tested round
+  at a time. The time for people, demos and changes.
 - `DEMO PREP` (last 30 minutes): no new work.
 Then the current task. Line 2: eight dots for Capture, Ask, Plan, Skeleton,
 Tests, Split, Build, Demo (● done, ◐ current, ○ not started), time, time
 left, test counts, next check-in. When a change request arrives, say which
 phase it lands in and what that means for the clock.
+
+**Token budget.** If `.claude/guard.json` has `"budget": "lean"` or I say
+tokens are limited: no parallel subagents (use /next, not /dispatch), the
+reviewer once per finished slice instead of per step, short replies, and
+report the session's spend at each check-in (`/cost` if available). Say in
+the map line which mode we are in.
 
 **Fewer stops.** Stop only at the gates above, for a decision only I can
 make, or for a blocker. Inside Build, a bare /step runs a whole wave end to
@@ -105,8 +112,8 @@ no jargon, each under 90 characters, so I can read it in two seconds:
 ⏭ 11:42 check-in, then the final report
 ```
 - 📍 where we are: step n of 8, its name, the current task in a few words.
-- 🗣 what I say to the room: at most 25 words, one or two sentences, said
-  the way a person talks. No file names, no counts unless they matter.
+- 🗣 what I say to the room: at most 25 words, one or two sentences, in my
+  voice as written in `.claude/kit/VOICE.md`. No file names, no counts unless they matter.
 - ⏎ what I type: bare `/step` and what it does; one alternative only if
   there is a real choice.
 - ⏭ what comes next.
