@@ -20,6 +20,17 @@ irm https://raw.githubusercontent.com/henryzhangpku/agent-starter/main/bootstrap
 
 Requirements: Python 3 for the hooks (standard library only) and, ideally, pytest.
 
+## A build day in one command
+
+Someone describes a problem; you have a few hours to build it with an agent,
+in front of them. Bootstrap an empty folder, start `claude`, and type
+**`/step`** again and again. It walks the day in order (capture the prompt,
+ask the questions that matter, plan, failing acceptance tests, split into
+parallel tasks, build, demo prep), checks in every 30 minutes, stops at each
+point where a human should decide or speak, and asks when it needs input.
+Every reply ends with what to say to the room and what happens next.
+One page: [`template/COMMANDS.md`](template/COMMANDS.md).
+
 ## What you get
 
 **Every day, in any repository** (on as soon as it is installed)
