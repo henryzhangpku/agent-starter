@@ -43,7 +43,10 @@ demo will show. Before any threshold or rule is tuned, split the data into a wor
 and a held-out set (or say plainly there is none and never claim one). The
 output files must follow the exact shapes the team gave (PROMPT.md answers);
 if a shape was not given, ask. Size it to the day: the fewest modules and the least code that meet the
-answers; a senior engineer should find nothing to delete. Keep it to one screen.
+answers; a senior engineer should find nothing to delete. Fit the prompt to the day, whatever its size: if it is bigger than the day,
+name the MVP slice we will ship, and put the rest on a roadmap we show in
+the demo; if it is small, plan an early MVP and more iterate rounds with the
+team. Keep it to one screen.
 
 Stop and wait. I will edit it out loud. When I say "save", write it to
 PLAN.md in its existing structure (a checkbox and a test name per step, the
