@@ -20,8 +20,13 @@ served by the same server that calls **only the API**, never the internals,
 so what the room sees is exactly what an integrating system would get.
 `python -m <package>.serve` starts both. A script that prints JSON is not a
 demo. The page must reach the **MVP demo bar** (the first ITERATE round):
-(a) opens on the story: the problem in one line and the headline numbers
-against the baseline, with the main weakness beside them; (b) three guided
+(a) a **Mission & solution** section first, for the team's review: the
+prompt as given (from PROMPT.md) and the answers that shaped it, then our
+solution in plain words (what it does, how it works, why we chose it, with
+the key decisions from DECISIONS.md), then the headline numbers against the
+baseline with the main weakness beside them; one switch (`?view=customer` or
+a toggle) hides this section for a customer-facing demo;
+(a2) then the product itself, the software hook; (b) three guided
 scenes on real records, as buttons: the everyday case, the case it refuses
 or flags on purpose, the hard case; (c) try your own input; (d) every
 output shows why (reason and evidence), never raw JSON (a raw toggle is
