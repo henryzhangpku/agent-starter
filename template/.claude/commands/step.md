@@ -53,10 +53,16 @@ sub-commands' "wait for go/save" gates are satisfied by my next /step.
 If a check-in is due, do /checkin first (it updates STATUS.md) and give me
 the four lines to say out loud, then continue.
 
-**Start every reply with the map**, one line, so I always know where we are:
-`[1 Capture ✓] [2 Ask ✓] [3 Plan ✓] [3b Skeleton ✓] [4 Tests ✓] [5 Split ✓] [6 Build ▶ wave 2/3] [7 Demo]  ·  10:58, 1h22 to demo  ·  tests 9/9 acceptance  ·  next check-in 11:12`
-Use ✓ done, ▶ current (with sub-progress: wave n/N or plan step n/N), blank
-for not started.
+**Start every reply with the map**, two short lines in a code block, so I
+always know where we are and how far the finish is:
+
+```
+●●●●●●◐○  6/8 Build · plan step 6 of 6 (spot-check)
+11:22 · demo 12:20 (58m) · 215 tests, 9/9 acceptance · check-in 11:42
+```
+Eight dots for Capture, Ask, Plan, Skeleton, Tests, Split, Build, Demo:
+● done, ◐ current, ○ not started. Line 1 names the current step and its
+sub-progress; line 2 is time, time left, test counts, next check-in.
 
 **Fewer stops.** Stop only at the gates above, for a decision only I can
 make, or for a blocker. Inside Build, a bare /step runs a whole wave end to
