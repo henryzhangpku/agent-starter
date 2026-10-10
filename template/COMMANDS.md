@@ -26,6 +26,12 @@ asks. Every reply ends with the same four short lines: 📍 where you are, 🗣 
 | 7 | **Demo prep**: README, decisions, walkthrough | rehearse once out loud |
 | ↻ | **Check-in**, automatically every 30 minutes | say the four lines; STATUS.md updates for anyone who looks |
 
+## The team changes something mid-build
+
+`/step <the change, in their words>` (or `/change ...`): it restates it, shows
+the impact and what moves out to keep the demo time, waits for you, then
+changes tests first and builds it. You say the trade-off back to them.
+
 ## See what's built, any time
 
 `/show` runs the product and shows three real examples and the parts in plain

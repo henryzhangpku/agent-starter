@@ -49,6 +49,10 @@ sub-commands' "wait for go/save" gates are satisfied by my next /step.
    `python scripts/clock.py status`): stop feature work and do /demo-prep.
    **Gate:** tell me to rehearse WALKTHROUGH.md out loud once.
 
+**If $ARGUMENTS is a new or changed requirement from the team** (not an
+answer to your question), handle it with /change (.claude/commands/change.md)
+before continuing the step flow.
+
 **Every time,** before anything else: run `python scripts/clock.py status`.
 If a check-in is due, do /checkin first (it updates STATUS.md) and give me
 the four lines to say out loud, then continue.
