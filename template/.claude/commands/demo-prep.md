@@ -58,6 +58,21 @@ We are stopping feature work. Do these in order and do not add features:
      take questions.
    Add, for each of the three core functions, a two-sentence plain-English
    explanation I can say if asked about the code.
+8. Write `docs/QA.md`: the ten questions the room is most likely to ask
+   after the demo, each with a short answer in my voice. Cover:
+   - **Why X, not Y**: each key decision in DECISIONS.md, the alternative
+     we rejected and the reason (time, risk, the answer someone gave us).
+   - **Why didn't you ask Z**: from TEAM.md, who we talked to, who we did
+     not, why (time, scope, what we assumed instead), and what we would ask
+     them now.
+   - **What if we added feature xyz**: the top three cut-list or roadmap
+     items, each with rough cost, what it would touch, and the trade-off;
+     and the line "Want me to start it now? I can show you the impact in two
+     minutes" (then `/step <their feature>` runs /change live).
+   - Where it breaks, how it scales, swapping in their real data, how we
+     know it's right (tests, scorer, the hand-checked sample).
+   Each answer: agree with what's fair, give the reason, say what I'd do next.
+   Never defensive, never invented.
 Finally: run the suite three times (no flakes), check every number in
 README and WALKTHROUGH against the measured output (same definitions as the
 problem statement; the main weakness in the same sentence as the headline),
