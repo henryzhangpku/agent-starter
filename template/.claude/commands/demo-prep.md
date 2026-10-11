@@ -47,8 +47,13 @@ We are stopping feature work. Do these in order and do not add features:
       for); what each needs from them. Concrete, small, no fundraising talk.
    9. Evidence of how I work: three timestamped facts from the day (e.g.
       "test locked 3 minutes after the change"), then "Questions?".
-7. Write WALKTHROUGH.md: a 5-minute spoken script that follows the pitch
-   slide by slide (slide 4 switches to the live demo and back), in my voice (.claude/kit/VOICE.md), the case that I
+7. Write WALKTHROUGH.md for presenting in this order: **(1) the pitch**, to
+   leave a strong impression (5 minutes, slide by slide; slide 4 is a short
+   live taste of the demo, then back); **(2) the team view**, the report
+   walked top to bottom (mission and decisions, how the day went, the guided
+   scenes, the gaps), for questions; **(3) the customer view**
+   (`?view=customer`): the product alone, used the way a customer would, ending
+   with someone in the room trying their own input. The pitch script in my voice (.claude/kit/VOICE.md), the case that I
    should be hired after a day in their office:
    - 0:00 Mission: their prompt in one line, and what I asked first and why.
    - 0:45 Solution: what we built, how, and the one decision that mattered most.
