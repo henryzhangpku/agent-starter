@@ -15,4 +15,6 @@ enterprise look.
 - **Layout**: generous whitespace, a single column up to about 72rem, cards
   with a 1px hairline and no heavy shadow, rounded corners of 10-12px,
   metrics as large light numerals with a mono label.
+- **Theme**: light by default, like most enterprise products; dark only through
+  a visible toggle, never forced by the viewer's system setting.
 - **Tone**: plain, confident, enterprise; no gradients, no emoji.
