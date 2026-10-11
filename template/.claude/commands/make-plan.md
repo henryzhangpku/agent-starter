@@ -20,7 +20,11 @@ status code, and an `/health` endpoint;
 endpoint, request and response schema, error shapes, one example each) and
 interactive docs at `/docs` (Swagger UI loaded from the unpkg CDN, falling
 back to a plain rendered list if offline);
-(2b) **ready for their agent**: the team's product is an AI agent, so
+(2b) **ready for their agent, on their interface**: if the team showed
+us their real action or payload format, build to it exactly behind one
+adapter module; if not, say the interface is an assumption, keep it in one
+adapter, and list it in the gaps, so swapping to their format touches only
+that file; the team's product is an AI agent, so
 the API must plug into an agent loop: each endpoint also published as an
 LLM tool definition (`docs/tools.json`: name, description, JSON-schema
 input, the same shapes for Anthropic or OpenAI tool use), a stated

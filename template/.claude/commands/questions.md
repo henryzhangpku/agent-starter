@@ -28,3 +28,11 @@ and a new section "Questions to ask". Do not change code.
 
 End with the three questions to ask in the first five minutes, in order,
 phrased exactly as you would say them out loud. $ARGUMENTS
+
+If the build must plug into the team's existing system (their agent, their
+pipeline, their data), the first questions are about **their real interface**,
+never an invented one: what does their agent emit (an action or tool-call
+schema, a message object, an event), where can a step hook in (before a
+reply goes out, as a tool, after the call), what is the latency budget at
+that point, what rules or engine already exist, and can we see one real
+sample (a log line, a payload, a schema file). Ask for the sample by name.
