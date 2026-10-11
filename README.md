@@ -31,6 +31,11 @@ point where a human should decide or speak, and asks when it needs input.
 Every reply ends with what to say to the room and what happens next.
 One page: [`template/COMMANDS.md`](template/COMMANDS.md).
 
+**Starting a build day.** A brand-new problem: `mkdir -p ~/repo/<name> && cd ~/repo/<name>`,
+run the bootstrap line above, copy in whatever you were handed (read-only inputs in `data/`),
+`git init -q && git add -A && git commit -qm start && claude`, then `/step`. Their existing
+repo: clone it, branch, run the bootstrap line, commit, `claude`, then `/onboard` and `/step`.
+
 ## What you get
 
 **Every day, in any repository** (on as soon as it is installed)
