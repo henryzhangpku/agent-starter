@@ -7,10 +7,21 @@ asks. Every reply ends with the same four short lines: 📍 where you are, 🗣 
 **`/step` is your only reply:** bare `/step` accepts its recommendation;
 `/step <your words>` gives answers, edits or a different decision.
 
-**Before they speak** (empty folder):
+**Before they speak**, pick the case that matches what they hand you:
 
+    # A. A brand-new problem (empty folder, maybe some files they give you)
+    mkdir -p ~/repo/<short-name> && cd ~/repo/<short-name>
     curl -fsSL https://raw.githubusercontent.com/henryzhangpku/agent-starter/main/bootstrap.sh | bash
+    # copy in whatever they hand you (data, a schema, docs) - read-only inputs go in data/
     git init -q && git add -A && git commit -qm "start" && claude
+
+    # B. Their existing repo
+    git clone <their repo> && cd <repo> && git checkout -b <your-branch>
+    curl -fsSL https://raw.githubusercontent.com/henryzhangpku/agent-starter/main/bootstrap.sh | bash
+    git add -A && git commit -qm "agent kit" && claude      # then /onboard before /step
+
+Then `/step` and paste your notes of what they said. If Python packages are
+needed: `python3 -m venv .venv && . .venv/bin/activate && pip install -q pytest`.
 
 ## The phase is on the first line of every reply
 
