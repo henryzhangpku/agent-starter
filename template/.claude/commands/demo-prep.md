@@ -45,8 +45,8 @@ We are stopping feature work. Do these in order and do not add features:
       the gaps, their real data through the loader, wire the API into their
       service), Next month (scale, monitoring, the features the team asked
       for); what each needs from them. Concrete, small, no fundraising talk.
-   9. How I work: three lines (ask first, ship small with tests, decide with
-      the team), then "Questions?".
+   9. Evidence of how I work: three timestamped facts from the day (e.g.
+      "test locked 3 minutes after the change"), then "Questions?".
 7. Write WALKTHROUGH.md: a 5-minute spoken script that follows the pitch
    slide by slide (slide 4 switches to the live demo and back), in my voice (.claude/kit/VOICE.md), the case that I
    should be hired after a day in their office:
@@ -83,6 +83,22 @@ We are stopping feature work. Do these in order and do not add features:
      know it's right (tests, scorer, the hand-checked sample).
    Each answer: agree with what's fair, give the reason, say what I'd do next.
    Never defensive, never invented.
+9. **Facts, not notes.** Regenerate every count, time and file reference on
+   the page, the pitch and the docs from a fresh test run and from git right
+   now, never from earlier notes. Any claim that names a test or file gives
+   its path; any failing test is named by its title. A gap of more than 20
+   minutes with no commit gets one plain sentence (what happened); no
+   boilerplate apologies.
+10. **Show the change and the miss live.** One guided scene (or a preset
+   try-your-own input) exercises the mid-build requirement change, and its
+   output names the change; if a trade-off was later reversed, the timeline
+   says "cut at T, restored at T2". The case behind the page's main weakness
+   runs live too, and its "why" matches the page's account of the miss.
+   Reasons name the specific thing detected, not only a rule code.
+11. **No residue.** Answers credited to the team must come from the team
+   (PROMPT.md answers with who and when); our own defaults are labelled as
+   ours. No line repeated across QA answers. The pitch's last slide is
+   "Evidence of how I work": timestamped facts from the day, not adjectives.
 Finally: run the suite three times (no flakes), check every number in
 README and WALKTHROUGH against the measured output (same definitions as the
 problem statement; the main weakness in the same sentence as the headline),

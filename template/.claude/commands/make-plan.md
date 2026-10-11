@@ -37,7 +37,9 @@ or flags on purpose, the hard case; (c) try your own input; (d) every
 output shows why (reason and evidence), never raw JSON (a raw toggle is
 fine); (e) "where it would hurt us": the known gaps; (f) looks like a
 product: a small token palette, readable type scale, works at laptop and
-phone width, loading and error states. Then the cut
+phone width, loading and error states. Then an **after the MVP** list, ranked: the known gaps, the scorer's
+weakest metric, the held-out check, so there is never idle time. Record each
+answer with who gave it and when; tag our own assumptions as ours. Then the cut
 list (what we drop if short on time), the risks, and the three things the
 demo will show. Before any threshold or rule is tuned, split the data into a working set
 and a held-out set (or say plainly there is none and never claim one). The
