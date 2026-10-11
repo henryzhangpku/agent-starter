@@ -77,7 +77,9 @@ We are stopping feature work. Do these in order and do not add features:
    and where their agent calls in; arrows labelled with the contract type),
    one paragraph per component, the data flow for one request, and what
    would change at 10x and 100x. Show the same diagram in the team view
-   (rendered) and on the pitch's solution slide. Check `/openapi.json` and
+   (rendered) and on the pitch's solution slide, and serve the doc itself
+   rendered at `/architecture` (and `/integration`, `/qa`) with the diagrams
+   drawn, so a reviewer can open it from the browser. Check `/openapi.json` and
    `/docs` load and match the code; link both from the team view. The spec
    documents API routes only (no HTML pages); every operation has request
    and response schemas, one example and a 4xx error schema; 400 responses

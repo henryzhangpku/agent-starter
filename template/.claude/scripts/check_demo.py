@@ -29,7 +29,7 @@ def main() -> int:
     ap.add_argument("--port", type=int, default=8000)
     port = ap.parse_args().port
     checks: list[tuple[str, bool, str]] = []
-    for path, want in (("/", "<"), ("/pitch", "<"), ("/docs", "<")):
+    for path, want in (("/", "<"), ("/pitch", "<"), ("/docs", "<"), ("/architecture", "<")):
         code, body = get(port, path)
         checks.append((f"GET {path}", code == 200 and want in body, f"HTTP {code}"))
     code, body = get(port, "/openapi.json")
