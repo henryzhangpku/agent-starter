@@ -15,6 +15,11 @@ a framework is allowed; `--port` flag, request-scoped state, read the body
 before any error response), with the endpoints the team's system would call,
 request and response shapes written in CONTRACTS.md, errors as JSON with a
 status code, and an `/health` endpoint;
+(2a) **documented like a real API**: an OpenAPI 3 spec served at
+`/openapi.json` (written by hand or generated from the contract types; every
+endpoint, request and response schema, error shapes, one example each) and
+interactive docs at `/docs` (Swagger UI loaded from the unpkg CDN, falling
+back to a plain rendered list if offline);
 (2b) **ready for their agent**: the team's product is an AI agent, so
 the API must plug into an agent loop: each endpoint also published as an
 LLM tool definition (`docs/tools.json`: name, description, JSON-schema

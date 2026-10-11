@@ -67,6 +67,13 @@ We are stopping feature work. Do these in order and do not add features:
      take questions.
    Add, for each of the three core functions, a two-sentence plain-English
    explanation I can say if asked about the code.
+7a. Write `docs/ARCHITECTURE.md` with a Mermaid diagram (components:
+   loader, core logic, the one model module if any, store, API, demo page,
+   and where their agent calls in; arrows labelled with the contract type),
+   one paragraph per component, the data flow for one request, and what
+   would change at 10x and 100x. Show the same diagram in the team view
+   (rendered) and on the pitch's solution slide. Check `/openapi.json` and
+   `/docs` load and match the code; link both from the team view.
 7b. Write `docs/INTEGRATION.md`, one screen: where it sits in their agent's
    turn (a small diagram: caller → agent → our tool or guard → reply), the
    tool definitions in `docs/tools.json`, one real request and response,
