@@ -36,7 +36,7 @@ scenes on real records, as buttons: the everyday case, the case it refuses
 or flags on purpose, the hard case; (c) try your own input; (d) every
 output shows why (reason and evidence), never raw JSON (a raw toggle is
 fine); (e) "where it would hurt us": the known gaps; (f) looks like a
-product: a small token palette, readable type scale, works at laptop and
+product, following `.claude/kit/LOOK.md` (the team's look): a small token palette, readable type scale, works at laptop and
 phone width, loading and error states. Then an **after the MVP** list, ranked: the known gaps, the scorer's
 weakest metric, the held-out check, so there is never idle time. Record each
 answer with who gave it and when; tag our own assumptions as ours. Then the cut
