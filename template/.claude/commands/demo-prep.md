@@ -120,6 +120,10 @@ We are stopping feature work. Do these in order and do not add features:
    (PROMPT.md answers with who and when); our own defaults are labelled as
    ours. No line repeated across QA answers. The pitch's last slide is
    "Evidence of how I work": timestamped facts from the day, not adjectives.
+**The gate.** Start the server, then run
+`python .claude/scripts/check_demo.py --port <port>`. Demo prep is not done
+until every check passes; fix what fails and run it again. Paste its output
+in your reply.
 Finally: run the suite three times (no flakes), check every number in
 README and WALKTHROUGH against the measured output (same definitions as the
 problem statement; the main weakness in the same sentence as the headline),

@@ -56,7 +56,9 @@ sub-commands' "wait for go/save" gates are satisfied by my next /step.
    step with a test, build it, and say the round in one line (what, why,
    number before and after). Repeat until 30 minutes before the demo.
 7. **Demo prep.** 30 minutes or less before the demo (check
-   `python .claude/scripts/clock.py status`): stop feature work and do /demo-prep.
+   `python .claude/scripts/clock.py status`): stop feature work and do /demo-prep,
+   reading .claude/commands/demo-prep.md fresh (never from memory); it ends
+   only when `.claude/scripts/check_demo.py` passes every check.
    **Gate:** tell me to rehearse WALKTHROUGH.md out loud once.
 
 **If $ARGUMENTS is a new or changed requirement from the team** (not an
