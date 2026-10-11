@@ -15,6 +15,13 @@ a framework is allowed; `--port` flag, request-scoped state, read the body
 before any error response), with the endpoints the team's system would call,
 request and response shapes written in CONTRACTS.md, errors as JSON with a
 status code, and an `/health` endpoint;
+(2b) **ready for their agent**: the team's product is an AI agent, so
+the API must plug into an agent loop: each endpoint also published as an
+LLM tool definition (`docs/tools.json`: name, description, JSON-schema
+input, the same shapes for Anthropic or OpenAI tool use), a stated
+place in the agent's turn (a tool the agent calls, a guard before a reply
+goes out, or a batch after the call), a latency budget, and the failure
+mode (fail closed, what the agent says instead);
 (3) one **demo page** (one HTML file, inline CSS and JS, no build step)
 served by the same server that calls **only the API**, never the internals,
 so what the room sees is exactly what an integrating system would get.

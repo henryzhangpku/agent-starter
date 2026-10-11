@@ -67,6 +67,15 @@ We are stopping feature work. Do these in order and do not add features:
      take questions.
    Add, for each of the three core functions, a two-sentence plain-English
    explanation I can say if asked about the code.
+7b. Write `docs/INTEGRATION.md`, one screen: where it sits in their agent's
+   turn (a small diagram: caller → agent → our tool or guard → reply), the
+   tool definitions in `docs/tools.json`, one real request and response,
+   latency (measured p50/p95), what happens on timeout or error, and how
+   their real data plugs in through the loader. Add a test that plays a
+   tiny agent loop: it reads `docs/tools.json`, calls the API the way an
+   agent would, and checks the answer and the fail-closed path. Add an
+   "Plug it into your agent" section to the team view and to the roadmap
+   slide.
 8. Write `docs/QA.md`: the ten questions the room is most likely to ask
    after the demo, each with a short answer in my voice. Cover:
    - **Why X, not Y**: each key decision in DECISIONS.md, the alternative
