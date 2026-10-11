@@ -5,7 +5,8 @@ description: Step 3 - write the failing acceptance tests from PLAN.md, then lock
 From PLAN.md and the skeleton's entry point and contract, propose 5 to 8 behaviour-level acceptance tests (no implementation details, no near-duplicates) in plain English: end-to-end
 behaviour the demo depends on (every input gets one output, outputs valid,
 the rules from TEAM.md hold, bad input goes to a review list). One test must run the end-to-end command
-and validate every output file against the exact shape the team gave; any
+and validate every output file against the exact shape the team gave (the
+exact keys, nothing extra, from their example); any
 metric we report must be computed with the team's definition. List them and
 wait for my go; I may cut or add.
 

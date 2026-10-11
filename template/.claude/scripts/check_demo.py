@@ -38,6 +38,21 @@ def main() -> int:
     except ValueError:
         ok = False
     checks.append(("GET /openapi.json has paths", ok, f"HTTP {code}"))
+    if ok:
+        spec = json.loads(body)
+        html = [p for p in spec["paths"] if p in ("/", "/pitch", "/docs", "/openapi.json")]
+        checks.append(("spec documents API routes only", not html, ", ".join(html)))
+        weak = []
+        for path, ops in spec["paths"].items():
+            for verb, op in ops.items():
+                if not isinstance(op, dict):
+                    continue
+                resp = op.get("responses", {})
+                ok2 = any(str(c).startswith("2") and "content" in r for c, r in resp.items())
+                ok4 = any(str(c).startswith("4") for c in resp)
+                if not (ok2 and ok4):
+                    weak.append(f"{verb.upper()} {path}")
+        checks.append(("every operation has a 2xx schema and a 4xx", not weak, ", ".join(weak[:4])))
     code, body = get(port, "/?view=customer")
     checks.append(("customer view", code == 200, f"HTTP {code}"))
     for f in ("docs/ARCHITECTURE.md", "docs/INTEGRATION.md", "docs/QA.md", "docs/TESTS.md", "docs/tools.json",

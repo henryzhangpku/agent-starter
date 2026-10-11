@@ -66,6 +66,10 @@ check against that.
 17. **Serving is not training.** The server loads a fitted artifact made
    offline and refuses to start without it; it never fits from labels at
    startup or silently falls back.
+19. **The headline survives the real objective.** The number in the
+   headline is the task's own end-to-end measure with every policy layer on
+   (caps, fallbacks, the change requests), compared with the trivial
+   baselines (always / never / do-nothing). A subset metric never leads.
 18. **Built once, not per request.** State is built at startup or on write,
    not replayed on every read; no global lock around a full recompute; one
    source of truth.

@@ -51,7 +51,9 @@ sub-commands' "wait for go/save" gates are satisfied by my next /step.
    make-plan.md (mission & solution section, three guided scenes, try your
    own, why, gaps, product look) before anyone sees it. Then do /show and give me the line to invite the team to look
    and react. **Gate:** I bring back what they said (`/step <their
-   feedback>`), or a bare `/step` to improve on our own. Then turn the
+   feedback>`), or a bare `/step` to improve on our own. At least two
+   rounds must come from someone else's feedback (ask a named person for it at
+   the check-in); check-ins are said and logged at the time, never batched. Then turn the
    feedback, or else the weakest measured number, into the next PLAN.md
    step with a test, build it, and say the round in one line (what, why,
    number before and after). Repeat until 30 minutes before the demo.

@@ -45,6 +45,8 @@ We are stopping feature work. Do these in order and do not add features:
       the gaps, their real data through the loader, wire the API into their
       service), Next month (scale, monitoring, the features the team asked
       for); what each needs from them. Concrete, small, no fundraising talk.
+   Vary the deck to the problem: titles in the problem's own words, not a
+   fixed template; no line reused from another build.
    9. Evidence of how I work: three timestamped facts from the day (e.g.
       "test locked 3 minutes after the change"), then "Questions?".
 7. Write WALKTHROUGH.md for presenting in this order: **(1) the pitch**, to
@@ -67,13 +69,21 @@ We are stopping feature work. Do these in order and do not add features:
      take questions.
    Add, for each of the three core functions, a two-sentence plain-English
    explanation I can say if asked about the code.
-7a. Write `docs/ARCHITECTURE.md` with a Mermaid diagram (components:
+7a. Write `docs/ARCHITECTURE.md` with two Mermaid diagrams: a **runtime
+   view** (process boundaries, where state lives and whether it survives a
+   restart, the failure path for each dependency, the PII boundary, the
+   latency budget per hop) and a **component view** (components:
    loader, core logic, the one model module if any, store, API, demo page,
    and where their agent calls in; arrows labelled with the contract type),
    one paragraph per component, the data flow for one request, and what
    would change at 10x and 100x. Show the same diagram in the team view
    (rendered) and on the pitch's solution slide. Check `/openapi.json` and
-   `/docs` load and match the code; link both from the team view.
+   `/docs` load and match the code; link both from the team view. The spec
+   documents API routes only (no HTML pages); every operation has request
+   and response schemas, one example and a 4xx error schema; 400 responses
+   say which field is wrong. `/docs` must work offline too (a rendered
+   fallback when the CDN is unreachable). Lead the results with the
+   end-to-end number against the trivial baselines, subsets second.
 7b. Write `docs/INTEGRATION.md`, one screen: where it sits in their agent's
    turn (a small diagram: caller → agent → our tool or guard → reply), the
    tool definitions in `docs/tools.json`, one real request and response,

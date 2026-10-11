@@ -54,7 +54,8 @@ weakest metric, the held-out check, so there is never idle time. Record each
 answer with who gave it and when; tag our own assumptions as ours. Then the cut
 list (what we drop if short on time), the risks, and the three things the
 demo will show. Before any threshold or rule is tuned, split the data into a working set
-and a held-out set (or say plainly there is none and never claim one). The
+and a held-out set, write the held-out ids' hash into DECISIONS.md, and score
+it once at the end (or say plainly there is none and never claim one). The
 output files must follow the exact shapes the team gave (PROMPT.md answers);
 if a shape was not given, ask. Size it to the day: the fewest modules and the least code that meet the
 answers; a senior engineer should find nothing to delete. Fit the prompt to the day, whatever its size: if it is bigger than the day,
