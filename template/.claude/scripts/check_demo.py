@@ -88,6 +88,9 @@ def main() -> int:
                 if not (ok2 and ok4):
                     weak.append(f"{verb.upper()} {path}")
         checks.append(("every operation has a 2xx schema and a 4xx", not weak, ", ".join(weak[:4])))
+    code, body = get(port, "/healthz")
+    checks.append(("GET /healthz", code == 200, f"HTTP {code}"))
+    checks.append(("Dockerfile", (ROOT / "Dockerfile").exists(), "missing"))
     code, body = get(port, "/?view=customer")
     checks.append(("customer view", code == 200, f"HTTP {code}"))
     pages = {p: get(port, p) for p in ("/", "/pitch", "/architecture", "/integration", "/qa")}

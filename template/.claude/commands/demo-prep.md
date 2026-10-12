@@ -95,6 +95,24 @@ We are stopping feature work. Do these in order and do not add features:
    agent would, and checks the answer and the fail-closed path. Add an
    "Plug it into your agent" section to the team view and to the roadmap
    slide.
+7c. **Operate it, on paper and in numbers.** Three short additions, each
+   with a test where it is code:
+   - **Latency against their budget.** If the prompt is real-time (voice, a
+     turn, a live API call) measure p50 and p95 end to end through the API
+     on the real data (at least 200 calls, a script in `tests/`), and show
+     them next to the budget the team gave (or "sub-700 ms" if none): in
+     the runtime table, on the results slide and in the team view.
+   - **How it runs.** A `Dockerfile` (slim Python base, non-root user, the
+     server's `--port`), a `GET /healthz` that returns 200 only when the
+     data and rules loaded, and a paragraph in ARCHITECTURE on running it
+     on Kubernetes: stateless replicas behind a service, readiness on
+     `/healthz`, where state lives, what scales and what does not. Written
+     down, not deployed; say so.
+   - **Where data is stored.** If the build keeps any store (a database,
+     a queue, an audit log), put the schema in ARCHITECTURE: tables, keys,
+     the index for the one query that matters, and how a write stays
+     idempotent (a key, `INSERT ... ON CONFLICT`). If it keeps none, say in
+     one line what you would store first in production and why.
 8. Write `docs/QA.md`: the ten questions the room is most likely to ask
    after the demo, each with a short answer in my voice. Cover:
    - **Why X, not Y**: each key decision in DECISIONS.md, the alternative
