@@ -48,6 +48,7 @@ repo: clone it, branch, run the bootstrap line, commit, `claude`, then `/onboard
 | `.claude/hooks/run_tests.py` | **PostToolUse:** runs the tests after every edit; the whole suite while it takes under 20 s, only the edited file's tests once it is slower, nothing for prose. Failures go straight back to the agent. `"test_scope": "all"/"changed"` in `guard.json` overrides |
 | `.claude/hooks/context_budget.py` | **UserPromptSubmit:** silent until the session's context passes 150k tokens, then tells the agent to suggest `NOTES.md` and a fresh session; at 300k it asks it to wrap up first. Thresholds in `guard.json` |
 | `.claude/agents/reviewer.md` | read-only reviewer with a fresh context: an agent grading its own work passes itself |
+| `.claude/skills/` | loaded on demand when a problem mixes them in: **sql-and-schema** (read a handed-over database, schema, idempotent writes, indexes), **async-concurrency** (task graphs, cancellation, timeouts, limits), **reliability** (retries, idempotency, Docker, health checks, Kubernetes on paper), **team-repo** (working in their repo with teammates) |
 | `PROMPT.md`, `PLAN.md`, `NOTES.md`, `DECISIONS.md` | the request and answers; the plan with a test per step; state across `/clear`; what was proposed, chosen, and why |
 | `/next` | take the next plan step, plan first |
 

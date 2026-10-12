@@ -437,3 +437,34 @@ def test_look_kit_files_present_and_light_by_default():
     assert "look v1" in css and "diagrams v1" in js
     assert "prefers-color-scheme" not in css          # dark only through the toggle
     assert 'data-theme="dark"' in css and "min-width: 900px" in css
+
+
+def test_skills_have_frontmatter_and_are_wired():
+    skills = sorted((TEMPLATE / ".claude/skills").glob("*/SKILL.md"))
+    names = {p.parent.name for p in skills}
+    assert {"sql-and-schema", "async-concurrency", "reliability", "team-repo"} <= names
+    for p in skills:
+        head = p.read_text(encoding="utf-8").split("---")[1]
+        assert f"name: {p.parent.name}" in head and "description: " in head
+    plan = (TEMPLATE / ".claude/commands/make-plan.md").read_text(encoding="utf-8")
+    assert all(n in plan for n in names)
+
+
+def test_async_dag_pattern_from_the_skill_runs_parents_first_and_in_parallel():
+    import asyncio, re, time
+    text = (TEMPLATE / ".claude/skills/async-concurrency/SKILL.md").read_text(encoding="utf-8")
+    code = re.search(r"```python\n(.*?)```", text, re.S).group(1)
+    ns = {"asyncio": asyncio}
+    exec(code, ns)
+    order = []
+    def job(name, secs):
+        async def fn():
+            order.append(("start", name)); await asyncio.sleep(secs); order.append(("end", name)); return name
+        return fn
+    jobs = {"A": ([], job("A", .05)), "B": (["A"], job("B", .05)), "C": (["A"], job("C", .05)), "D": (["B", "C"], job("D", .01))}
+    t0 = time.perf_counter()
+    out = asyncio.run(ns["run_all"](jobs))
+    assert out == {"A": "A", "B": "B", "C": "C", "D": "D"}
+    assert order.count(("start", "A")) == 1                       # diamond runs the parent once
+    assert order.index(("end", "A")) < order.index(("start", "B"))
+    assert time.perf_counter() - t0 < 0.15                        # B and C overlapped

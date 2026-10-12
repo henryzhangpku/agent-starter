@@ -73,6 +73,16 @@ check against that.
 18. **Built once, not per request.** State is built at startup or on write,
    not replayed on every read; no global lock around a full recompute; one
    source of truth.
+20. **SQL is safe and tested.** Parameterised queries only; money never
+   float; "latest row per key" by a parsed timestamp; writes idempotent by
+   a key; the input database opened read-only; every query that feeds a
+   decision has a test with a known answer (`.claude/skills/sql-and-schema`).
+21. **Async never blocks or half-finishes.** No blocking calls inside
+   coroutines; every task awaited or cancelled and awaited; a semaphore
+   never held while waiting on another task; timeouts on outbound calls;
+   side effects (payments, messages) cannot be left half done by
+   cancellation; a dependency cycle is detected, not deadlocked
+   (`.claude/skills/async-concurrency`).
 
 ## What you may change
 
