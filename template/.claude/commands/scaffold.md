@@ -28,6 +28,8 @@ my "go":
 - **Facts**: fill the "Project facts" section of CLAUDE.md (data path and
   format, the model module, the contract, the run and test commands), and set
   `.claude/guard.json`: every input directory under `protected_prefixes`.
+  Leave `acceptance_tests` empty: /make-tests writes the acceptance tests and
+  locks them afterwards with `lock_tests.py`. Locking now blocks writing them.
 
 After my go: create it, run `python -m <package> --data data --out out` and
 `python -m pytest -q` to show it imports and runs, and commit with
