@@ -451,7 +451,7 @@ def test_skills_have_frontmatter_and_are_wired():
 
 
 def test_async_dag_pattern_from_the_skill_runs_parents_first_and_in_parallel():
-    import asyncio, re, time
+    import asyncio, re
     text = (TEMPLATE / ".claude/skills/async-concurrency/SKILL.md").read_text(encoding="utf-8")
     code = re.search(r"```python\n(.*?)```", text, re.S).group(1)
     ns = {"asyncio": asyncio}
@@ -462,9 +462,8 @@ def test_async_dag_pattern_from_the_skill_runs_parents_first_and_in_parallel():
             order.append(("start", name)); await asyncio.sleep(secs); order.append(("end", name)); return name
         return fn
     jobs = {"A": ([], job("A", .05)), "B": (["A"], job("B", .05)), "C": (["A"], job("C", .05)), "D": (["B", "C"], job("D", .01))}
-    t0 = time.perf_counter()
     out = asyncio.run(ns["run_all"](jobs))
     assert out == {"A": "A", "B": "B", "C": "C", "D": "D"}
     assert order.count(("start", "A")) == 1                       # diamond runs the parent once
     assert order.index(("end", "A")) < order.index(("start", "B"))
-    assert time.perf_counter() - t0 < 0.15                        # B and C overlapped
+    assert order.index(("start", "C")) < order.index(("end", "B"))  # B and C overlapped (no wall-clock flake)
