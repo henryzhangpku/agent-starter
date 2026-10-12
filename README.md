@@ -57,7 +57,7 @@ repo: clone it, branch, run the bootstrap line, commit, `claude`, then `/onboard
 |---|---|
 | `.claude/kit/CARD.md` | the whole day on one page: what to do and what to say at each moment; keep it open |
 | `.claude/kit/RUNBOOK.md` | the build day step by step, with modes for a new problem, an existing codebase, team mode and shipping; time boxes, copy-paste prompts, the commit that closes each phase |
-| `.claude/scripts/clock.py` + a UserPromptSubmit hook | **the build-day clock:** `clock.py start --demo 16:30` once; every prompt then carries time-to-demo, and the agent warns you when a check-in or milestone (plan, tests, slice, stop, README, demo) is due or overdue. Check-ins are logged to `CHECKINS.md`. Says nothing until started |
+| `.claude/scripts/clock.py` + a UserPromptSubmit hook | **the build-day clock:** `/step demo 16:30` starts it (the agent runs `clock.py`; you never type a script); every prompt then carries time-to-demo, and the agent warns you when a check-in or milestone (plan, tests, slice, stop, README, demo) is due or overdue. Check-ins are logged to `CHECKINS.md`. Says nothing until started |
 | `/checkin`, `/questions` | status in four lines, logged with the clock; who to ask what, from the prompt |
 
 **Team mode: agents as an engineering team**

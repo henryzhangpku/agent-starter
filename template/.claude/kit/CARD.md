@@ -4,7 +4,7 @@
 
 | when | do | say |
 |---|---|---|
-| prompt given | `python .claude/scripts/clock.py start --demo HH:MM`; type the prompt into PROMPT.md word for word | "Let me write that down exactly." |
+| prompt given | `/step` with your notes; then `/step demo HH:MM` (it starts the clock) | "Let me write that down exactly." |
 | minute 2 | `/questions`; ask the first three out loud; answers into PROMPT.md | "Who uses this? What does done look like by 4:30? Which mistake costs more?" |
 | minute 5 | project facts in CLAUDE.md; paths in `.claude/guard.json` | "Telling the agent the rules before it writes anything." |
 | minute 10 | plan mode (`Shift+Tab`), then edit the plan out loud; save PLAN.md | "Cutting X, doing Y first, adding Z. Does that match your priority?" |

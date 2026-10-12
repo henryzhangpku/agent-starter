@@ -19,9 +19,12 @@ sub-commands' "wait for go/save" gates are satisfied by my next /step.
 1. **Capture.** PROMPT.md still has the template line under "Word for word"
    and $ARGUMENTS is empty: ask me to paste my notes of what was said, and
    stop. With notes: write PROMPT.md as /capture does (.claude/commands/capture.md).
-   **Gate:** show me the three assumptions to read back out loud, and tell me
-   to start the clock with the demo time we agree:
-   `! python .claude/scripts/clock.py start --demo HH:MM` (practice: `--budget 180`).
+   **Gate:** show me the three assumptions to read back out loud, and ask
+   for the demo time we agree (⏎ `/step demo 16:30`, or `/step demo in 180`
+   for a practice run). When I give it, **you** start the clock:
+   `python .claude/scripts/clock.py start --demo 16:30` (or `--budget 180`).
+   I never type a script. If the clock has not been started by any later
+   step (`clock.py status` says so), ask for the demo time before anything else.
 2. **Ask.** TEAM.md has no "Questions to ask" section: do /questions
    (.claude/commands/questions.md). **Gate:** give me the three questions to
    ask out loud, word for word, and wait for the answers. When I give answers,

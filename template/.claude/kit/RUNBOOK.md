@@ -80,11 +80,10 @@ It should repeat: plan first, small steps, tests first, protected tests. If it d
 
 ## Phase 1. Capture the problem (minutes 0-5)
 
-**1.0 Start the clock** the moment the prompt is given, with the demo time you agree:
-```
-python .claude/scripts/clock.py start --demo 16:30 --every 30
-```
-Practice runs: `python .claude/scripts/clock.py start --budget 120` instead, run the
+**1.0 Start the clock** the moment the prompt is given: `/step demo 16:30`
+(practice: `/step demo in 180`). The agent runs `clock.py start` for you; on
+the day you never type a script. Behind it (for reference):
+`python .claude/scripts/clock.py start --demo 16:30 --every 30`. Practice runs
 build to completion, mark each milestone as you actually reach it
 (`clock.py done plan|tests|slice|green|stop|readme|demo`, where `green` means
 every acceptance test passes), and finish with `clock.py report` for the real
