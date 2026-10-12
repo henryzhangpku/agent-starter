@@ -35,7 +35,8 @@ We are stopping feature work. Do these in order and do not add features:
    nine slides, one idea each, real numbers only:
    1. The problem: their prompt in one line, and who feels it.
    2. What we heard: the questions I asked and the answers that shaped it.
-   3. The solution: what it does and how, in one picture or flow.
+   3. The solution: the problem underneath in one line, the approaches we
+      weighed and why this one, then what it does and how, in one picture.
    4. Live demo: a button that opens the demo page on the guided scenes.
    5. Results: the headline numbers against the baseline, the weakness beside them.
    6. How we spent the day: the timeline, MVP time, feedback rounds, the

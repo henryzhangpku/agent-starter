@@ -9,7 +9,14 @@ questions, or the team's own repo and teammates, read the matching
 `.claude/skills/*/SKILL.md` (sql-and-schema, async-concurrency, reliability,
 team-repo) before planning, and put its tests into the plan's steps. The room
 may mix these into any problem; the plan should show we noticed. If there is no data, step 1 of the plan is a small synthetic
-dataset with the hard cases the answers mention, plus a held-out slice. Propose a plan for this build, without writing any code:
+dataset with the hard cases the answers mention, plus a held-out slice. **Abstract first.** Open the plan with "The problem underneath": the
+problem class in one line in plain words (for example "rank actions under hard
+rules where one kind of mistake costs far more", "measure before you
+optimise", "route each item to the cheapest handler that is good enough"),
+two or three candidate approaches with one line each on cost, risk and what
+they need, the pick and why, and what would change our mind. This is what the
+room wants to see first: how we turn their messy problem into a solvable one.
+Propose a plan for this build, without writing any code:
 the thinnest end-to-end slice first, then improvements in priority order.
 For each step: what it produces and the test that proves it. Always include,
 right after the thinnest slice, the **integration surface and the demo**,

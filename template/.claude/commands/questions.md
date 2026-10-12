@@ -26,6 +26,19 @@ and a new section "Questions to ask". Do not change code.
 4. **What you will offer back**, one line per person: a task row they could
    own, a demo time, or a decision you want them to make.
 
+**Use the team's time like the scarce thing it is** (the build day is the only
+time we get with these people):
+- Batch questions into rounds of at most three, each one that changes the
+  design; never ask what the data or the prompt already answers (look first).
+- Phrase each as an assumption to correct ("I'm assuming X, correct me")
+  so a busy person can answer in a sentence.
+- Don't assume we know their domain, and don't fake it: for unfamiliar terms
+  ask "teach me the two-minute version of how this works today and what a bad
+  outcome looks like", then restate it in their words.
+- Say what we will assume if nobody answers, so nobody blocks us.
+- Ask the person who owns the answer; when they answer, record who said it,
+  so the pitch can credit them and the decision log can cite them.
+
 End with the three questions to ask in the first five minutes, in order,
 phrased exactly as you would say them out loud. $ARGUMENTS
 
