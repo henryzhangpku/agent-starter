@@ -22,8 +22,8 @@ Requirements: Python 3 for the hooks (standard library only) and, ideally, pytes
 
 ## A build day in one command
 
-Someone describes a problem; you have a few hours to build it with an agent,
-in front of them. Bootstrap an empty folder, start `claude`, and type
+A teammate brings a problem (a spike, a hackathon, a pairing day); you have a
+few hours to build it with an agent while they watch and weigh in. Bootstrap an empty folder, start `claude`, and type
 **`/step`** again and again. It walks the day in order (capture the prompt,
 ask the questions that matter, plan, failing acceptance tests, split into
 parallel tasks, build, demo prep), checks in every 30 minutes, stops at each

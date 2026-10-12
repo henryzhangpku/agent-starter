@@ -1,4 +1,4 @@
-"""Demo-prep gate: is the onsite report really ready?  python .claude/scripts/check_demo.py [--port 8000]
+"""Demo-prep gate: is the end-of-day report really ready?  python .claude/scripts/check_demo.py [--port 8000]
 
 Starts nothing. Expects the server to be running on the port (start it first). Prints one line
 per check and exits 1 if any fails, so /demo-prep cannot finish on memory alone.
