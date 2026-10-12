@@ -87,17 +87,40 @@ repo: clone it, branch, run the bootstrap line, commit, `claude`, then `/onboard
 | `TEAM.md` | who owns what, questions asked and answers, handoffs to people, credit |
 | `.claude/kit/LANE.md` | a brief for a second agent or a person owning a slice |
 
-## The first thirty minutes with it (the full day is in .claude/kit/RUNBOOK.md)
+## What `/step` does, step by step
 
-1. **0-5:** write the request into `PROMPT.md`; ask the people, not the tool,
-   who uses the output, what data exists, what done means, what costs most.
-2. **5-10:** fill the project facts in `CLAUDE.md` and the paths in `.claude/guard.json`.
-3. **10-20:** plan mode in the agent; edit its plan out loud; save it as
-   `PLAN.md` with a test per step.
-4. **20-30:** dictate five to ten acceptance tests into `tests/test_acceptance.py`;
-   show they fail; commit. From here the agent builds against your definition of done.
+| step | what happens | where a human decides |
+|---|---|---|
+| 1 Capture | the prompt into `PROMPT.md`, plus three assumptions to read back | correct the assumptions; agree the demo time |
+| 2 Ask | who to ask what; rounds of at most three questions that change the design, phrased "I'm assuming X, correct me" | ask them, record the answers and who gave them |
+| 3 Plan | opens with **the problem underneath** (the problem class, two or three approaches, the pick and why), then the thinnest slice first, a test per step | edit the plan out loud, then "save" |
+| 4 Skeleton | package, contract, entry point, project facts, guard paths | |
+| 5 Done-tests | acceptance tests from the answers, failing, then **locked**: the agent can never weaken them | if one turns out wrong, the human changes it (one `!` line the agent prepares) |
+| 6 Split | contracts first, then tasks with disjoint files, in waves | approve the split |
+| 7 Build, then iterate | a wave per `/step`, reviewed and committed; at the MVP, show it, take feedback from named people, ship one tested round at a time; `/change` absorbs a new requirement | demo the slice; bring back what the room said |
+| 8 Demo prep | the end-of-day report below, gated by `check_demo.py` | rehearse once |
 
-Then `/next`, review, commit, repeat; `/checkin` every half hour.
+The skills in `.claude/skills/` (SQL, async, reliability, working in a team repo) load
+whenever the problem mixes them in.
+
+## What you have at the end of the day
+
+A running product and the case for it, all served by the build itself:
+- **an internal pitch** (`/pitch`): the problem, what we heard, the problem underneath and
+  the solution, a live demo, results next to the weakness, how the day was spent, gaps,
+  roadmap;
+- **the team view** (the demo page with guided scenes, try-your-own and why) and **the
+  customer view** (`?view=customer`);
+- **the API** with `/openapi.json` and Swagger at `/docs`, a `/healthz`, a Dockerfile;
+- **the docs**, rendered: architecture (runtime and component diagrams, top-down and
+  readable, latency against the budget, the schema if anything is stored), how to plug it
+  into the team's agent, likely questions with answers, and a test map;
+- a clean repo root and everything committed.
+
+`.claude/scripts/check_demo.py` checks all of it against the live server and fails on
+anything missing, unreadable diagrams, a dark-by-default page or raw markdown links, so
+demo prep cannot finish on memory. The look comes from `.claude/kit/LOOK.md`, `look.css` and
+`diagrams.js`: calm and light by default; set it once from the team's own product feel.
 
 ## Why the guardrails are code
 
