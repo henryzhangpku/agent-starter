@@ -29,7 +29,7 @@ We are stopping feature work. Do these in order and do not add features:
 5. Update README.md: what it does, how to run it, the result, known gaps.
 6. Tidy DECISIONS.md to the three decisions that matter most, each with the
    alternative we rejected and why.
-6b. Build **the internal pitch** in the look from `.claude/kit/LOOK.md`: `/pitch` on the same server, one HTML file,
+6b. Build **the internal pitch** in the look from `.claude/kit/LOOK.md` (link the kit's `look.css`; light by default, dark only by the toggle): `/pitch` on the same server, one HTML file,
    no libraries, arrow keys and click to advance, readable from the back of a
    room, same look as the demo page. A short internal pitch, not a fundraise:
    nine slides, one idea each, real numbers only:
@@ -69,7 +69,7 @@ We are stopping feature work. Do these in order and do not add features:
      take questions.
    Add, for each of the three core functions, a two-sentence plain-English
    explanation I can say if asked about the code.
-7a. Write `docs/ARCHITECTURE.md` with two Mermaid diagrams: a **runtime
+7a. Write `docs/ARCHITECTURE.md` with two Mermaid diagrams, drawn the LOOK.md way (top-down, 2-4 word boxes, 1-3 word arrows, every detail in the table under the diagram, rendered with the kit's `diagrams.js`): a **runtime
    view** (process boundaries, where state lives and whether it survives a
    restart, the failure path for each dependency, the PII boundary, the
    latency budget per hop) and a **component view** (components:

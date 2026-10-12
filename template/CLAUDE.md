@@ -18,6 +18,8 @@ parts that can be enforced mechanically; `.claude/guard.json` says which paths.
    `.claude/hooks/guard.py`, through the edit tools and through the shell
    alike. If one is wrong, stop and say so; do not edit around it, skip it,
    mark it expected-to-fail, or reach for `sed`/`>`/a script to change it.
+   The human changes it: write the fix as a script in `.claude/scratch/` for
+   them to run with `!` (see `/step`), never run it yourself.
 5. **The model extracts or proposes, code decides.** Scores, thresholds, money,
    identity and compliance checks are deterministic, tested code that fails
    closed. A model may fill a typed schema; it never makes the decision.

@@ -49,7 +49,7 @@ sub-commands' "wait for go/save" gates are satisfied by my next /step.
    an output end to end for the first time: `python .claude/scripts/clock.py done slice`
    and tell me to demo it to the room now.
 6b. **Iterate: MVP, feedback, next round.** Every PLAN.md step is ticked and
-   more than 30 minutes remain. Finishing early is good: it buys time for
+   more than 45 minutes remain. Finishing early is good: it buys time for
    people. Round 1 is always the demo: bring the page to the MVP demo bar in
    make-plan.md (mission & solution section, three guided scenes, try your
    own, why, gaps, product look) before anyone sees it. Then do /show and give me the line to invite the team to look
@@ -59,8 +59,10 @@ sub-commands' "wait for go/save" gates are satisfied by my next /step.
    the check-in); check-ins are said and logged at the time, never batched. Then turn the
    feedback, or else the weakest measured number, into the next PLAN.md
    step with a test, build it, and say the round in one line (what, why,
-   number before and after). Repeat until 30 minutes before the demo.
-7. **Demo prep.** 30 minutes or less before the demo (check
+   number before and after). Repeat until 45 minutes before the demo. A bare
+   /step with no outside feedback buys one round of our own at most; the next
+   bare /step asks a named person for feedback instead of inventing work.
+7. **Demo prep.** 45 minutes or less before the demo (it takes about 30) (check
    `python .claude/scripts/clock.py status`): stop feature work and do /demo-prep,
    reading .claude/commands/demo-prep.md fresh (never from memory); it ends
    only when `.claude/scripts/check_demo.py` passes every check.
@@ -93,7 +95,7 @@ Line 1 starts with the **phase**, in capitals, so I can use the time well:
 - `ITERATE` (MVP done; say when): like a startup after launch: show it to
   the team (the market), take their feedback, ship one small tested round
   at a time. The time for people, demos and changes.
-- `DEMO PREP` (last 30 minutes): no new work.
+- `DEMO PREP` (last 45 minutes): no new work.
 Then the current task. Line 2: eight dots for Capture, Ask, Plan, Skeleton,
 Tests, Split, Build, Demo (● done, ◐ current, ○ not started), time, time
 left, test counts, next check-in. When a change request arrives, say which
@@ -110,6 +112,14 @@ make, or for a blocker. Inside Build, a bare /step runs a whole wave end to
 end: implement, review, apply the reviewers' recommended non-blocking fixes
 (with a test), commit, and move on. Mention what you fixed in one line; do
 not stop to ask about it. Keep replies to one screen.
+
+**A locked test that is wrong.** Never edit it and never offer to; the lock
+is the point. Write the exact change as a small script in `.claude/scratch/`
+that asserts the old lines are there before replacing them, show the change
+in two to four lines, give me the 🗣 line to confirm the rule with the team,
+and make ⏎ the one line I run myself: `! python .claude/scratch/<name>.py`.
+That is the only option offered (no "edit it by hand"). On the next /step,
+run the tests and commit it as my change, naming who agreed.
 
 **End every reply with this block, always.** Four short lines, plain words,
 no jargon, each under 90 characters, so I can read it in two seconds:

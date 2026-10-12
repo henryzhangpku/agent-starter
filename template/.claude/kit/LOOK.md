@@ -18,3 +18,14 @@ enterprise look.
 - **Theme**: light by default, like most enterprise products; dark only through
   a visible toggle, never forced by the viewer's system setting.
 - **Tone**: plain, confident, enterprise; no gradients, no emoji.
+- **Use the kit files, do not hand-roll the look**: copy `.claude/kit/look.css`
+  and `.claude/kit/diagrams.js` into the product's static folder, link
+  `look.css` from every page (demo, pitch, rendered docs) and include
+  `diagrams.js` on every page with a diagram. `check_demo.py` fails without
+  them, and fails on any `prefers-color-scheme: dark` rule.
+- **Diagrams** (Mermaid): top-down (`flowchart TD`), boxes of 2-4 words,
+  arrows of 1-3 words (at most 28 characters); every detail (latency,
+  failure path, PII, contract) goes in the table under the diagram. Drawn
+  at least 900px wide, click for full screen (diagrams.js does both).
+- **Links between docs** go to the served page (`/integration`), never to a
+  `.md` file or as raw markdown.

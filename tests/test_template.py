@@ -402,3 +402,38 @@ def test_fanout_ranks_attempts_and_cleans_up(project):
 def test_agents_md_points_to_claude_md(project):
     txt = (project / "AGENTS.md").read_text(encoding="utf-8")
     assert "CLAUDE.md" in txt and "acceptance tests" in txt
+
+
+def _check_demo():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("check_demo", TEMPLATE / ".claude/scripts/check_demo.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_lint_mermaid_flags_unreadable_diagrams():
+    lint = _check_demo().lint_mermaid
+    wide = "```mermaid\nflowchart LR\n  A[Collections agent / dialer] -->|POST /decide, loan_id or raw loan + notes| B(API)\n```"
+    problems = lint(wide)
+    assert any("top-down" in p for p in problems) and any("arrow label" in p for p in problems)
+    long_box = "```mermaid\nflowchart TD\n  A[One Python process: lossmit.serve, 127.0.0.1, threaded] --> B[API]\n```"
+    assert any("box label" in p for p in lint(long_box))
+    good = "```mermaid\nflowchart TD\n  A[Dialer] -->|POST /decide| B(API)\n  B -- decision --> C{Rules}\n```"
+    assert lint(good) == []
+    assert lint("```mermaid\nsequenceDiagram\n  A->>B: hi\n```") == []
+
+
+def test_raw_markdown_links_are_caught():
+    cd = _check_demo()
+    assert cd.RAW_MD_LINK.search(cd.visible_text("<td>see [INTEGRATION.md](INTEGRATION.md)</td>"))
+    assert not cd.RAW_MD_LINK.search(cd.visible_text('<td>see <a href="/integration">integration</a></td>'))
+    assert not cd.RAW_MD_LINK.search(cd.visible_text("<pre>[x](y.md)</pre>"))
+
+
+def test_look_kit_files_present_and_light_by_default():
+    css = (TEMPLATE / ".claude/kit/look.css").read_text(encoding="utf-8")
+    js = (TEMPLATE / ".claude/kit/diagrams.js").read_text(encoding="utf-8")
+    assert "look v1" in css and "diagrams v1" in js
+    assert "prefers-color-scheme" not in css          # dark only through the toggle
+    assert 'data-theme="dark"' in css and "min-width: 900px" in css

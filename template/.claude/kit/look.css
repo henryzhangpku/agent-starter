@@ -1,0 +1,47 @@
+/* look v1: the shared look for the demo page, the pitch and the rendered docs (see LOOK.md).
+   Copy into the product's static folder and link it from every page. Light by default; dark only
+   when the page sets data-theme="dark" (diagrams.js adds the toggle). Never key off the system setting. */
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300;6..72,400&family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
+
+:root {
+  --ground: #fafafa; --surface: #ffffff; --ink: #171717; --muted: #737373; --line: #e5e5e5;
+  --accent: #e9d5ff; --accent-ink: #6d28d9; --good: #15803d; --bad: #b91c1c;
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --ground: #0a0a0a; --surface: #171717; --ink: #fafafa; --muted: #a3a3a3; --line: #2a2a2a;
+  --accent: #3b2a5c; --accent-ink: #c4b5fd; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 16px/1.6 var(--sans); }
+main, .wrap { max-width: 72rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 300; line-height: 1.15; text-wrap: balance; margin: 1.6em 0 .5em; }
+h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); margin-top: .4em; }
+h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+h3 { font-size: 1.35rem; }
+p, li { max-width: 68ch; }
+a { color: var(--accent-ink); }
+code, pre, .mono { font-family: var(--mono); font-size: .92em; }
+pre { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1.25rem; }
+.num { font: 300 2.6rem/1 var(--serif); font-variant-numeric: tabular-nums; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .95rem; }
+th, td { border-bottom: 1px solid var(--line); padding: .55rem .7rem; text-align: left; vertical-align: top; }
+th { font: 500 .75rem/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.table-wrap { overflow-x: auto; }
+
+/* diagrams: drawn big, scroll sideways if needed, click for full screen (diagrams.js) */
+.diagram { background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  padding: 1rem; margin: 1.25rem 0; overflow-x: auto; cursor: zoom-in; }
+.diagram svg { display: block; min-width: 900px; width: 100%; height: auto; max-width: none !important; margin: 0 auto; }
+.diagram-hint { font: .75rem var(--mono); color: var(--muted); margin-top: .4rem; }
+.diagram-full { position: fixed; inset: 0; z-index: 1000; background: var(--ground); display: flex;
+  align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
+.diagram-full svg { width: 96vw !important; height: 90vh !important; max-width: none !important; }
+.theme-toggle { position: fixed; top: .75rem; right: .75rem; z-index: 999; font: .75rem var(--mono);
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 999px;
+  padding: .35rem .7rem; cursor: pointer; }
