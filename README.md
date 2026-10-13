@@ -9,12 +9,12 @@ read afterwards.
 One command drops it into any project, on any fresh machine, without
 overwriting anything that is already there.
 
+macOS / Linux / WSL / Git Bash:
 ```bash
-# macOS / Linux / WSL / Git Bash
 curl -fsSL https://raw.githubusercontent.com/henryzhangpku/agent-starter/main/bootstrap.sh | bash
 ```
+Windows PowerShell:
 ```powershell
-# Windows PowerShell
 irm https://raw.githubusercontent.com/henryzhangpku/agent-starter/main/bootstrap.ps1 | iex
 ```
 
