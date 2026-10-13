@@ -21,12 +21,12 @@ asks. Every reply ends with the same four short lines: 📍 where you are, 🗣 
     git add -A && git commit -qm "agent kit" && claude      # then /onboard before /step
 
 Then `/step` and paste your notes of what they said. If Python packages are
-needed: `python3 -m venv .venv && . .venv/bin/activate && pip install -q pytest`.
+needed: `python3 -m venv .venv && . .venv/bin/activate && pip install pytest` (30-60 s).
 
 ## The phase is on the first line of every reply
 
 `SETUP` talk a lot · `BUILD MVP` heads down until the MVP passes · `ITERATE` MVP is
-out: show the team, take feedback, ship small rounds · `DEMO PREP` last 30 minutes, no new work.
+out: show the team, take feedback, ship small rounds · `DEMO PREP` last 45 minutes, no new work.
 
 The 🗣 lines follow `.claude/kit/VOICE.md` (edit it once to sound like you).
 Limited tokens? Set `"budget": "lean"` in `.claude/guard.json`: no parallel agents.
@@ -36,7 +36,7 @@ Not Python? Set `"test_command"` there (`npm test`, `go test ./...`); Node, Go, 
 
 | # | step | the gate: you |
 |---|---|---|
-| 1 | **Capture**: your notes of what was said become PROMPT.md | read back three assumptions; start the clock |
+| 1 | **Capture**: your notes of what was said become PROMPT.md | read back three assumptions; agree the demo time (`/step demo 16:30` starts the clock) |
 | 2 | **Ask**: the questions that matter | ask three out loud, type the answers |
 | 3 | **Plan**: thinnest slice first, cut list, risks | edit out loud; `/step` saves (or `/step <edits>`) |
 | 3b | **Skeleton**: package, data contract, one run command, CLAUDE.md facts, guard paths | `/step` approves (or `/step <changes>`) |
