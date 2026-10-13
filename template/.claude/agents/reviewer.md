@@ -84,6 +84,12 @@ check against that.
    cancellation; a dependency cycle is detected, not deadlocked
    (`.claude/skills/async-concurrency`).
 
+22. **Numbers reconcile with what the team said.** Every count shown (items
+   in the queue, people's capacity, records decided) matches the facts the team
+   gave in PROMPT.md or TEAM.md; if the data disagrees (for example more records
+   than the team's queue size), flag it as a question for the person who set
+   the prompt instead of reporting the larger number.
+
 ## What you may change
 
 Only `tests/test_review.py`. For each untested edge case you find (empty input,
