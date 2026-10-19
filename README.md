@@ -141,6 +141,6 @@ make those paths read-only on disk or deny them in Claude Code's permissions.
 
 Builds that use the kit, filled in. See [`examples/`](examples/README.md).
 
-1. [call-eval](https://github.com/henryzhangpku/call-eval): post-call evaluation for voice agents. The kit was extracted from it; its `CLAUDE.md`, hooks, reviewer, `PLAN.md` and `DECISIONS.md` are the filled-in solo loop.
+1. A post-call evaluation project for voice agents. The kit was extracted from it; its `CLAUDE.md`, hooks, reviewer, `PLAN.md` and `DECISIONS.md` are the filled-in solo loop.
 
 MIT licence.
