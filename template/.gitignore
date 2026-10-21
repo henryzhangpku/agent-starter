@@ -8,3 +8,4 @@ __pycache__/
 .omc/
 CHECKINS.md
 .claude/scratch/
+.claude/build/

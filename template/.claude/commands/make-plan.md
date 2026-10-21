@@ -7,7 +7,7 @@ already here. **Skills:** if the prompt or the answers involve a database or
 SQL, concurrency or real-time work, calls to other services or production
 questions, or the team's own repo and teammates, read the matching
 `.claude/skills/*/SKILL.md` (sql-and-schema, async-concurrency, reliability,
-team-repo) before planning, and put its tests into the plan's steps. The room
+team-repo, java) before planning, and put its tests into the plan's steps. The room
 may mix these into any problem; the plan should show we noticed. If there is no data, step 1 of the plan is a small synthetic
 dataset with the hard cases the answers mention, plus a held-out slice. **Abstract first.** Open the plan with "The problem underneath": the
 problem class in one line in plain words (for example "rank actions under hard

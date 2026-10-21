@@ -318,6 +318,89 @@ def test_run_tests_maps_files_to_their_tests(project):
         sys.modules.pop("run_tests", None)
 
 
+
+# --- Java ---------------------------------------------------------------------
+
+needs_jdk = pytest.mark.skipif(shutil.which("javac") is None, reason="no JDK")
+
+SOLUTION = """import java.util.*;
+
+public class Solution {
+    public int add(int a, int b) { return a + b; }
+    public static void main(String[] args) { System.out.println(new Solution().add(2, 3)); }
+}
+"""
+
+
+def java_test(body):
+    return "class SolutionTest {\n    public static void main(String[] a) {\n        " + body + "\n    }\n}\n"
+
+
+@needs_jdk
+def test_run_tests_plain_java_compiles_then_runs_test_classes(project):
+    (project / "Solution.java").write_text(SOLUTION)
+    r = run_tests_hook(project, project / "Solution.java")
+    assert r.returncode == 0, r.stderr
+    assert "no *Test classes yet" in r.stdout
+    (project / "SolutionTest.java").write_text(java_test(
+        'if (new Solution().add(2, 3) != 5) throw new AssertionError("add");'))
+    r = run_tests_hook(project, project / "SolutionTest.java")
+    assert r.returncode == 0, r.stderr
+    assert "1 Java test class(es) passed" in r.stdout
+    assert not (project / "Solution.class").exists()          # build output stays in .claude/build
+
+
+@needs_jdk
+def test_run_tests_plain_java_reports_failures_and_compile_errors(project):
+    (project / "Solution.java").write_text(SOLUTION)
+    (project / "SolutionTest.java").write_text(java_test(
+        'if (new Solution().add(2, 2) != 5) throw new AssertionError("expected 5");'))
+    r = run_tests_hook(project, project / "Solution.java")
+    assert r.returncode == 2
+    assert "SolutionTest.java FAILED" in r.stderr and "expected 5" in r.stderr
+    assert "Picked up JAVA_TOOL_OPTIONS" not in r.stderr
+    (project / "Solution.java").write_text(SOLUTION.replace("return a + b;", "return a + ;"))
+    r = run_tests_hook(project, project / "Solution.java")
+    assert r.returncode == 2
+    assert "error" in r.stderr
+
+
+@needs_jdk
+def test_run_tests_plain_java_enables_asserts_and_packages(project):
+    pkg = project / "src" / "main" / "java" / "kit"
+    pkg.mkdir(parents=True)
+    (pkg / "Calc.java").write_text("package kit;\npublic class Calc { public static int sq(int x) { return x * x; } }\n")
+    (pkg / "CalcTest.java").write_text("package kit;\nclass CalcTest { public static void main(String[] a) { assert Calc.sq(3) == 10 : \"sq\"; } }\n")
+    r = run_tests_hook(project, pkg / "Calc.java")
+    assert r.returncode == 2 and "CalcTest.java FAILED" in r.stderr
+
+
+def test_run_tests_language_detection_ignores_the_placeholder(project):
+    sys.path.insert(0, str(project / ".claude" / "hooks"))
+    try:
+        import importlib
+        rt = importlib.import_module("run_tests")
+        importlib.reload(rt)
+        rt.ROOT = project
+        assert rt.other_command() is None                         # fresh kit: pytest
+        (project / "Solution.java").write_text(SOLUTION)
+        assert rt.other_command() == rt.PLAIN_JAVA                # placeholder does not force pytest
+        (project / "pom.xml").write_text("<project/>")
+        assert rt.other_command() == "mvn -q test"
+        (project / "mvnw").write_text("")
+        assert rt.other_command() == "./mvnw -q test"
+        (project / "tests" / "test_real.py").write_text("def test_x():\n    assert True\n")
+        assert rt.other_command() is None                         # real Python tests win
+    finally:
+        sys.path.pop(0)
+        sys.modules.pop("run_tests", None)
+
+
+def test_java_skill_is_present_and_wired():
+    text = (TEMPLATE / ".claude/skills/java/SKILL.md").read_text(encoding="utf-8")
+    assert "computeIfPresent" in text and "Solution.java" in text
+    assert "java" in (TEMPLATE / ".claude/commands/make-plan.md").read_text(encoding="utf-8")
+
 # --- the context budget -------------------------------------------------------
 
 def budget(project, transcript):

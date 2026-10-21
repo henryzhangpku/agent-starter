@@ -14,6 +14,12 @@ runs only the tests that belong to the file just edited:
 Edits to prose (.md, .txt) run nothing. Set "test_scope" in .claude/guard.json
 to "all" to always run the whole suite, or "changed" to always scope.
 
+Other languages run their own command (guard.json "test_command" wins). Java:
+Maven or Gradle when there is a build file (the wrapper if present); with no
+build file, plain javac: compile every .java file into .claude/build/java,
+then run each class named *Test or Test* with `java -ea` (its main throws or
+exits non-zero on failure). No test classes yet: compiling cleanly passes.
+
 Uses the repository's .venv when it exists, otherwise the interpreter running
 this script. Quiet on success (one line). On failure exits 2 with the last
 lines of pytest output on stderr, so the agent sees the failure immediately.
@@ -22,6 +28,8 @@ If pytest is not installed yet, says so once and does not block.
 from __future__ import annotations
 
 import json
+import re
+import shutil
 import subprocess
 import sys
 import time
@@ -32,6 +40,8 @@ TAIL = 15
 FAST_SECONDS = 20
 TIMING = ROOT / ".claude" / "test_timing.json"
 PROSE = {".md", ".txt", ".rst"}
+PLAIN_JAVA = "plain-java"
+SKIP_DIRS = {".claude", ".git", ".venv", "node_modules", "target", "build", "out", ".fanout"}
 
 
 def python() -> str:
@@ -94,16 +104,79 @@ def other_command() -> str | None:
         cmd = None
     if cmd:
         return cmd
+    if python_tests():
+        return None
+    mvn = "./mvnw -q test" if (ROOT / "mvnw").exists() else "mvn -q test"
+    gradle = "./gradlew test -q" if (ROOT / "gradlew").exists() else "gradle test -q"
     for marker, detected in (("package.json", "npm test --silent"), ("go.mod", "go test ./..."),
-                             ("Cargo.toml", "cargo test -q"), ("pom.xml", "mvn -q test"),
-                             ("build.gradle", "gradle test -q")):
-        if (ROOT / marker).exists() and not any(ROOT.glob("tests/test_*.py")):
+                             ("Cargo.toml", "cargo test -q"), ("pom.xml", mvn),
+                             ("build.gradle", gradle), ("build.gradle.kts", gradle)):
+        if (ROOT / marker).exists():
             return detected
+    if java_sources():
+        return PLAIN_JAVA
     return None
+
+
+def python_tests() -> list[Path]:
+    """Real pytest files; the kit's untouched placeholder acceptance test does not count,
+    or a fresh Java/Node/Go project would be run as pytest."""
+    return [p for p in ROOT.glob("tests/test_*.py")
+            if "def test_replace_me_with_real_acceptance_tests" not in p.read_text(encoding="utf-8", errors="replace")]
+
+
+def java_sources() -> list[Path]:
+    return sorted(p for p in ROOT.rglob("*.java")
+                  if not SKIP_DIRS.intersection(p.relative_to(ROOT).parts[:-1]))
+
+
+def java_class(src: Path) -> str:
+    m = re.search(r"^\s*package\s+([\w.]+)\s*;", src.read_text(encoding="utf-8", errors="replace"), re.M)
+    return f"{m.group(1)}.{src.stem}" if m else src.stem
+
+
+def quiet_jvm(text: str) -> str:
+    """Drop the JVM's 'Picked up JAVA_TOOL_OPTIONS' banner, which is noise to the agent."""
+    return "\n".join(l for l in text.splitlines() if not l.startswith("Picked up JAVA_TOOL_OPTIONS"))
+
+
+def run_plain_java() -> subprocess.CompletedProcess:
+    """javac everything, then run the *Test / Test* classes; stops at the first failure."""
+    sources = java_sources()
+    out_dir = ROOT / ".claude" / "build" / "java"
+    shutil.rmtree(out_dir, ignore_errors=True)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    args = ["javac", "-d", str(out_dir), *map(str, sources)]
+    try:
+        comp = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, timeout=300)
+    except FileNotFoundError:
+        return subprocess.CompletedProcess(args, 0, "run_tests.py: javac not found; skipping (install a JDK)", "")
+    if comp.returncode != 0:
+        return subprocess.CompletedProcess(args, comp.returncode, "", quiet_jvm(comp.stdout + comp.stderr))
+    tests = [s for s in sources if s.stem.endswith("Test") or s.stem.startswith("Test")]
+    if not tests:
+        return subprocess.CompletedProcess(args, 0, f"compiled {len(sources)} Java file(s); no *Test classes yet", "")
+    lines = []
+    for t in tests:
+        run_args = ["java", "-ea", "-cp", str(out_dir), java_class(t)]
+        try:
+            p = subprocess.run(run_args, cwd=ROOT, capture_output=True, text=True, timeout=120,
+                               stdin=subprocess.DEVNULL)
+        except subprocess.TimeoutExpired:
+            return subprocess.CompletedProcess(run_args, 1, "", f"{t.name}: timed out after 120 s (a deadlock or a wait on stdin?)")
+        out = quiet_jvm(p.stdout + p.stderr).strip()
+        if p.returncode != 0:
+            return subprocess.CompletedProcess(run_args, p.returncode, "\n".join(lines), f"{t.name} FAILED\n{out}")
+        lines.append(f"{t.name} ok" + (f"\n{out}" if out else ""))
+    lines.append(f"{len(tests)} Java test class(es) passed")
+    return subprocess.CompletedProcess(args, 0, "\n".join(lines), "")
 
 
 def run(args: list[str]) -> tuple[subprocess.CompletedProcess, float]:
     cmd = other_command()
+    if cmd == PLAIN_JAVA:
+        t0 = time.monotonic()
+        return run_plain_java(), time.monotonic() - t0
     if cmd:
         t0 = time.monotonic()
         proc = subprocess.run(cmd, shell=True, cwd=ROOT, capture_output=True, text=True, timeout=300)

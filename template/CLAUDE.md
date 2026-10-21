@@ -44,5 +44,5 @@ parts that can be enforced mechanically; `.claude/guard.json` says which paths.
 - Data: `<path and format>`; inputs are read-only.
 - The only module that calls a model: `<path>`.
 - Data contract between parts: `<file and fields>`.
-- Run tests: `python -m pytest -q`
+- Run tests: `python -m pytest -q` (Java: the hook runs Maven/Gradle, or `javac` + the `*Test` classes; see `.claude/skills/java`)
 - Review: after each step, the `reviewer` subagent checks the diff before commit.
